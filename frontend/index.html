@@ -563,34 +563,34 @@
 
         // ← NEW: Send feedback to backend
         async function sendFeedback(messageId, feedbackType) {
-            const feedbackDiv = document.getElementById(`feedback_${messageId}`);
-            const buttons = feedbackDiv.querySelectorAll('.feedback-btn');
-            
-            // Disable buttons after feedback
-            buttons.forEach(btn => btn.classList.add('submitted'));
-            buttons.forEach(btn => btn.disabled = true);
-            
-            try {
-                const response = await fetch(`${API_BASE}/feedback`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        message_id: messageId,
-                        feedback: feedbackType,
-                        session_id: sessionId,
-                        timestamp: new Date().toISOString()
-                    })
-                });
-                
-                if (response.ok) {
-                    console.log("Feedback recorded:", feedbackType);
-                }
-            } catch (error) {
-                console.error("Feedback error:", error);
+        const feedbackDiv = document.getElementById(`feedback_${messageId}`);
+        const buttons = feedbackDiv.querySelectorAll('.feedback-btn');
+    
+        // Disable buttons after feedback
+        buttons.forEach(btn => btn.classList.add('submitted'));
+        buttons.forEach(btn => btn.disabled = true);
+    
+        try {
+            const formData = new FormData();
+            formData.append("message_id", messageId);
+            formData.append("feedback", feedbackType);
+            formData.append("session_id", sessionId);
+            formData.append("timestamp", new Date().toISOString());
+        
+            const response = await fetch(`${API_BASE}/feedback`, {
+                method: "POST",
+                body: formData  // ← CHANGED: Use FormData instead of JSON
+            });
+        
+            if (response.ok) {
+                console.log("Feedback recorded:", feedbackType);
+            } else {
+                console.error("Feedback error:", response.statusText);
             }
+        } catch (error) {
+            console.error("Feedback error:", error);
         }
+    }
 
         function formatResponse(text) {
             const lines = text.split('\n');
