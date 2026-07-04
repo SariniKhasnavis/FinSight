@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FinSight Analytics</title>
+    <style>
+        body { 
+            background: #0a0f1d; 
+            color: #f3f4f6; 
+            font-family: Arial; 
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card { 
+            background: #1a1a2e; 
+            padding: 2rem; 
+            border-radius: 8px; 
+            margin: 1rem 0;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        h1 { color: #38bdf8; }
+        h2 { color: #38bdf8; margin-top: 1.5rem; }
+        .stat { 
+            font-size: 2rem; 
+            color: #38bdf8; 
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        .label { color: #9ca3af; font-size: 0.9rem; }
+        button {
+            background: #38bdf8;
+            color: #0a0f1d;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        button:hover { opacity: 0.9; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .mini-card {
+            background: rgba(56, 189, 248, 0.1);
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #38bdf8;
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 FinSight Analytics Dashboard</h1>
+    
+    <div class="card">
+        <h2>Feedback Summary</h2>
+        <div class="grid">
+            <div class="mini-card">
+                <div class="label">Total Feedback</div>
+                <div class="stat" id="totalFeedback">0</div>
+            </div>
+            <div class="mini-card">
+                <div class="label">Helpful 👍</div>
+                <div class="stat" id="helpfulCount">0</div>
+            </div>
+            <div class="mini-card">
+                <div class="label">Not Helpful 👎</div>
+                <div class="stat" id="notHelpfulCount">0</div>
+            </div>
+            <div class="mini-card">
+                <div class="label">Satisfaction Rate</div>
+                <div class="stat" id="satisfactionRate">0%</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>Tool Usage</h2>
+        <div id="toolStats">Loading...</div>
+    </div>
+    
+    <div class="card">
+        <h2>Session Info</h2>
+        <div class="label">Active Sessions</div>
+        <div class="stat" id="sessionCount">0</div>
+    </div>
+    
+    <div class="card">
+        <h2>Export Data</h2>
+        <button onclick="exportFeedback()">📥 Export Feedback as CSV</button>
+        <button onclick="exportToolUsage()">📥 Export Tool Usage as CSV</button>
+        <button onclick="clearAnalytics()" style="background: #ef4444;">🗑️ Clear All Analytics</button>
+    </div>
+    
+    <script>
+        const API_BASE = window.location.origin;
+        
+        async function loadAnalytics() {
+            try {
+                const dashboard = await fetch(`${API_BASE}/analytics/dashboard`).then(r => r.json());
+                
+                // Update feedback stats
+                document.getElementById("totalFeedback").textContent = dashboard.feedback.total;
+                document.getElementById("helpfulCount").textContent = dashboard.feedback.helpful;
+                document.getElementById("notHelpfulCount").textContent = dashboard.feedback.not_helpful;
+                document.getElementById("satisfactionRate").textContent = dashboard.feedback.satisfaction_rate + "%";
+                
+                // Update tool stats
+                const toolStats = document.getElementById("toolStats");
+                if (Object.keys(dashboard.tools.most_used).length > 0) {
+                    let toolHTML = `<div class="label">Total Tool Calls: ${dashboard.tools.total_calls}</div>
+                                    <div style="margin-top: 1rem;">`;
+                    for (const [tool, count] of Object.entries(dashboard.tools.most_used)) {
+                        const percentage = Math.round((count / dashboard.tools.total_calls) * 100);
+                        toolHTML += `
+                            <div style="margin: 0.5rem 0;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                                    <span>${tool}</span>
+                                    <span>${count} (${percentage}%)</span>
+                                </div>
+                                <div style="background: #111827; height: 6px; border-radius: 3px; overflow: hidden;">
+                                    <div style="background: #38bdf8; height: 100%; width: ${percentage}%;"></div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    toolHTML += `</div>`;
+                    toolStats.innerHTML = toolHTML;
+                } else {
+                    toolStats.innerHTML = "<p>No tool usage data yet</p>";
+                }
+                
+                // Update session count
+                document.getElementById("sessionCount").textContent = dashboard.sessions;
+                
+            } catch (error) {
+                console.error("Analytics error:", error);
+            }
+        }
+        
+        async function exportFeedback() {
+            const data = await fetch(`${API_BASE}/export/feedback-csv`).then(r => r.json());
+            downloadCSV(data.csv, `finsight-feedback-${new Date().toISOString().split('T')[0]}.csv`);
+        }
+        
+        async function exportToolUsage() {
+            const data = await fetch(`${API_BASE}/export/tool-usage-csv`).then(r => r.json());
+            downloadCSV(data.csv, `finsight-tool-usage-${new Date().toISOString().split('T')[0]}.csv`);
+        }
+        
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+        }
+        
+        async function clearAnalytics() {
+            if (confirm("Are you sure? This will delete all feedback and tool usage data.")) {
+                await fetch(`${API_BASE}/analytics/clear`, { method: "DELETE" });
+                alert("Analytics cleared!");
+                loadAnalytics();
+            }
+        }
+        
+        loadAnalytics();
+        setInterval(loadAnalytics, 5000); // Refresh every 5 seconds
+    </script>
+</body>
+</html>

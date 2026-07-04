@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinSight — AI Financial Markets Agent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            background-color: #0a0f1d;
+            color: #f3f4f6;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #0a0f1d;
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+        }
+
+        .logo-main {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #38bdf8; 
+            letter-spacing: -0.02em;
+        }
+
+        .logo-sub {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-weight: 400;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+            overflow: hidden;
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .message {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            max-width: 85%;
+            animation: slideIn 0.25s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.agent {
+            align-self: flex-start;
+        }
+
+        .agent-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(56, 189, 248, 0.15);
+            border-radius: 50%;
+            color: #38bdf8;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .message-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .message-content {
+            padding: 1.2rem 1.5rem;
+            border-radius: 1rem;
+            word-wrap: break-word;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .message.user .message-content {
+            background-color: #1e293b;
+            color: #f3f4f6;
+            border-top-right-radius: 0.25rem;
+        }
+
+        .message.agent .message-content {
+            background-color: rgba(17, 24, 39, 0.7);
+            color: #9ca3af;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-top-left-radius: 0.25rem;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: #4b5563;
+            padding-left: 0.25rem;
+        }
+
+        /* ← NEW: Feedback button styling */
+        .feedback-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .feedback-buttons:hover {
+            opacity: 1;
+        }
+
+        .feedback-btn {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0.3rem 0.5rem;
+            border-radius: 0.3rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-btn:hover {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+        }
+
+        .feedback-btn.submitted {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* File upload badge styling */
+        .file-badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.2);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            word-break: break-all;
+        }
+
+        .input-area {
+            background-color: #0a0f1d;
+            padding: 1.5rem 0 2.5rem 0;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        /* File input styling */
+        .input-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex: 1;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            background-color: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #9ca3af;
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+        }
+
+        .file-input-label:hover {
+            background-color: rgba(30, 41, 59, 1);
+            border-color: rgba(56, 189, 248, 0.3);
+            color: #38bdf8;
+        }
+
+        .input-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background-color: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 9999px;
+            padding: 0.35rem 0.5rem 0.35rem 1.5rem;
+            transition: all 0.2s ease;
+            height: 56px;
+        }
+
+        .input-container:focus-within {
+            border-color: #38bdf8;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+        }
+
+        .input-icon {
+            color: #4b5563;
+            margin-right: 0.75rem;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .input-container input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #f3f4f6;
+            font-family: inherit;
+            font-size: 0.95rem;
+            height: 100%;
+            outline: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-container input::placeholder {
+            color: #4b5563;
+            opacity: 1;
+        }
+
+        .btn-send {
+            background-color: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #9ca3af;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .input-container input:not(:placeholder-shown) ~ .btn-send,
+        .btn-send:hover {
+            background-color: #38bdf8;
+            color: #0a0f1d;
+            border-color: #38bdf8;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #38bdf8;
+            font-size: 0.9rem;
+        }
+
+        .loading-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #38bdf8;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dot:nth-child(2) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(3) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <span class="logo-main">FinSight</span>
+            <span class="logo-sub">by Sarini</span>
+        </div>
+        <div class="live-status">
+            <div class="live-dot"></div>
+            <span>LIVE</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="chat-area">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message agent">
+                    <div class="agent-icon-wrapper">
+                        <i data-lucide="trending-up" style="width: 18px; height: 18px;"></i>
+                    </div>
+                    <div class="message-content-wrapper">
+                        <div class="message-content">
+                            Hello! I'm your stock market assistant. Ask me about stock prices, market trends, funds comparisons, or documents analysis.
+                        </div>
+                        <div class="message-time">09:41</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <!-- Input controls wrapper -->
+                <div class="input-controls">
+                    <!-- File upload button -->
+                    <div class="file-input-wrapper">
+                        <input type="file" id="docUpload" accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,.txt" onchange="updateFileSelection()">
+                        <label for="docUpload" class="file-input-label">
+                            <i data-lucide="paperclip" style="width: 16px; height: 16px;"></i>
+                            Attach
+                        </label>
+                    </div>
+
+                    <!-- Text input container -->
+                    <div class="input-container">
+                        <div class="input-icon">
+                            <i data-lucide="bot" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <input type="text" id="userInput" placeholder="Ask anything" onkeypress="handleEnter(event)">
+                        <button class="btn-send" onclick="sendMessage()">
+                            <i data-lucide="send-horizontal" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File selection display -->
+            <div style="padding: 0 0 0.5rem 0; font-size: 0.9rem;">
+                <span id="fileStatus"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = "http://localhost:8000";
+        let sessionId = `session_${Date.now()}`;
+        let selectedFile = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+        });
+
+        // Update file selection display
+        function updateFileSelection() {
+            const fileInput = document.getElementById("docUpload");
+            const fileStatus = document.getElementById("fileStatus");
+            
+            if (fileInput.files.length > 0) {
+                selectedFile = fileInput.files[0];
+                fileStatus.innerHTML = `<span class="file-badge">📎 ${selectedFile.name}</span>`;
+            } else {
+                selectedFile = null;
+                fileStatus.innerHTML = "";
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function getCurrentTimeLabel() {
+            const now = new Date();
+            return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById("userInput");
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Show file name with message if attached
+            let displayMessage = message;
+            if (selectedFile) {
+                displayMessage += ` [📎 ${selectedFile.name}]`;
+            }
+            addMessage(displayMessage, "user");
+            input.value = "";
+
+            showLoading();
+
+            try {
+                const formData = new FormData();
+                formData.append("message", message);
+                formData.append("session_id", sessionId);
+
+                // Append file if selected
+                if (selectedFile) {
+                    formData.append("file", selectedFile);
+                }
+
+                const response = await fetch(`${API_BASE}/chat`, {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                removeLoading();
+                addMessage(data.response, "agent");
+
+                // Clear file after sending
+                selectedFile = null;
+                document.getElementById("docUpload").value = "";
+                document.getElementById("fileStatus").innerHTML = "";
+
+            } catch (error) {
+                removeLoading();
+                addMessage(`⚠️ Error: ${error.message}`, "agent");
+            }
+        }
+
+        // ← MODIFIED: Add message function with feedback buttons
+        function addMessage(text, sender) {
+            const chatMessages = document.getElementById("chatMessages");
+            const messageDiv = document.createElement("div");
+            messageDiv.className = `message ${sender}`;
+
+            let innerStructure = '';
+            const currentTime = getCurrentTimeLabel();
+            const messageId = `msg_${Date.now()}`; // ← NEW: Unique ID
+
+            if (sender === 'agent') {
+                innerStructure += `
+                    <div class="agent-icon-wrapper">
+                        <i data-lucide="trending-up" style="width: 18px; height: 18px;"></i>
+                    </div>`;
+            }
+
+            innerStructure += `
+                <div class="message-content-wrapper">
+                    <div class="message-content"></div>
+                    <div class="message-time">${currentTime}</div>
+                    ${sender === 'agent' ? `
+                        <div class="feedback-buttons" id="feedback_${messageId}">
+                            <button class="feedback-btn" onclick="sendFeedback('${messageId}', 'helpful')" title="Helpful">
+                                <i data-lucide="thumbs-up" style="width: 14px; height: 14px;"></i>
+                            </button>
+                            <button class="feedback-btn" onclick="sendFeedback('${messageId}', 'not_helpful')" title="Not Helpful">
+                                <i data-lucide="thumbs-down" style="width: 14px; height: 14px;"></i>
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>`;
+
+            messageDiv.innerHTML = innerStructure;
+            messageDiv.id = messageId; // ← NEW: Store ID on element
+            
+            const contentDiv = messageDiv.querySelector('.message-content');
+            contentDiv.innerHTML = formatResponse(text);
+
+            chatMessages.appendChild(messageDiv);
+            lucide.createIcons();
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // ← NEW: Send feedback to backend
+        async function sendFeedback(messageId, feedbackType) {
+            const feedbackDiv = document.getElementById(`feedback_${messageId}`);
+            const buttons = feedbackDiv.querySelectorAll('.feedback-btn');
+            
+            // Disable buttons after feedback
+            buttons.forEach(btn => btn.classList.add('submitted'));
+            buttons.forEach(btn => btn.disabled = true);
+            
+            try {
+                const response = await fetch(`${API_BASE}/feedback`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message_id: messageId,
+                        feedback: feedbackType,
+                        session_id: sessionId,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log("Feedback recorded:", feedbackType);
+                }
+            } catch (error) {
+                console.error("Feedback error:", error);
+            }
+        }
+
+        function formatResponse(text) {
+            const lines = text.split('\n');
+            let html = '';
+            let i = 0;
+
+            while (i < lines.length) {
+                const line = lines[i];
+
+                if (line.trim().startsWith('|')) {
+                    let tableLines = [];
+                    while (i < lines.length && lines[i].trim().startsWith('|')) {
+                        tableLines.push(lines[i]);
+                        i++;
+                    }
+                    html += renderTable(tableLines);
+                } else if (line.trim()) {
+                    html += `<p style="margin-bottom: 0.4rem; line-height: 1.6;">${escapeHtml(line)}</p>`;
+                    i++;
+                } else {
+                    i++;
+                }
+            }
+
+            return html || text;
+        }
+
+        function renderTable(tableLines) {
+            if (tableLines.length < 2) return '';
+
+            const headerLine = tableLines[0];
+            const dataLines = tableLines.slice(2);
+
+            const headers = headerLine.split('|')
+                .map(h => h.trim())
+                .filter(h => h && h !== '');
+
+            const rows = dataLines
+                .map(line => line.split('|')
+                    .map(cell => cell.trim())
+                    .filter((cell, idx) => idx > 0 && idx <= headers.length)
+                )
+                .filter(row => row.some(cell => cell));
+
+            if (headers.length === 0) return '';
+
+            let html = `
+                <div style="background: #111827; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; margin: 1rem 0;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                        <thead>
+                            <tr style="background: #1f2937; border-bottom: 1px solid rgba(255,255,255,0.1);">`;
+
+            headers.forEach(header => {
+                html += `<th style="color: #38bdf8; padding: 0.75rem 1rem; text-align: left; font-weight: 600;">${escapeHtml(header)}</th>`;
+            });
+
+            html += `</tr></thead><tbody>`;
+
+            rows.forEach((row, idx) => {
+                html += `<tr style="border-bottom: 1px solid rgba(255,255,255,0.02); background: ${idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)'};">`;
+                row.forEach(cell => {
+                    html += `<td style="padding: 0.75rem 1rem; color: #9ca3af;">${escapeHtml(cell)}</td>`;
+                });
+                html += `</tr>`;
+            });
+
+            html += `</tbody></table></div>`;
+            return html;
+        }
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function showLoading() {
+            const chatMessages = document.getElementById("chatMessages");
+            const loadingDiv = document.createElement("div");
+            loadingDiv.className = "message agent";
+            loadingDiv.id = "loading";
+            loadingDiv.innerHTML = `
+                <div class="agent-icon-wrapper">
+                    <i data-lucide="trending-up" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div class="message-content-wrapper">
+                    <div class="message-content">
+                        <div class="loading">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
+                </div>`;
+            chatMessages.appendChild(loadingDiv);
+            lucide.createIcons();
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeLoading() {
+            const loading = document.getElementById("loading");
+            if (loading) loading.remove();
+        }
+    </script>
+</body>
+</html>
