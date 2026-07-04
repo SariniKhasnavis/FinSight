@@ -72,6 +72,18 @@ async def chat(
     response, updated_history = run_agent(message, history, pdf_path)
     conversation_store[session_id] = updated_history
 
+    # ← NEW: Parse tool usage from agent execution and log it
+    import re
+    tool_pattern = r'TOOL_USAGE: (\w+)'
+    tools_used = re.findall(tool_pattern, str(response))
+    for tool in tools_used:
+        tool_usage_log.append({
+            "tool": tool,
+            "session_id": session_id,
+            "timestamp": datetime.datetime.now().isoformat()
+        })
+        print(f"TRACKED: {tool}")
+
     if pdf_path and os.path.exists(pdf_path):
         os.unlink(pdf_path)
         print(f"DEBUG: Temp file deleted: {pdf_path}")  # ← NEW: Debug log
