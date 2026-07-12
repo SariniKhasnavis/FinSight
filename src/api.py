@@ -35,6 +35,9 @@ conversation_store = {}
 feedback_log = []
 tool_usage_log = []
 
+# ← NEW: Add this line
+user_queries_log = []
+
 # Get absolute path to frontend folder
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend")
 
@@ -52,6 +55,12 @@ async def chat(
         conversation_store[session_id] = []
 
     history = conversation_store[session_id]
+    # ← NEW: Log the user query
+    user_queries_log.append({
+        "session_id": session_id,
+        "message": message,
+        "timestamp": datetime.datetime.now().isoformat()
+    })
 
     pdf_path = None
     if file:  # ← CHANGED: Accept any file
@@ -277,7 +286,39 @@ async def get_dashboard():
         "sessions": len(conversation_store)
     }
 
+# ← NEW: Get user queries
+@app.get("/analytics/user-queries")
+async def get_user_queries():
+    """Get all user queries"""
+    if not user_queries_log:
+        return {"message": "No queries yet"}
+    
+    return {
+        "total_queries": len(user_queries_log),
+        "recent_queries": user_queries_log[-50:],  # Last 50 queries
+        "all_queries": user_queries_log
+    }
 
+
+# ← NEW: Export user queries as CSV
+@app.get("/export/user-queries-csv")
+async def export_queries_csv():
+    """Export user queries as CSV"""
+    if not user_queries_log:
+        return {"message": "No queries to export"}
+    
+    import csv
+    from io import StringIO
+    
+    output = StringIO()
+    writer = csv.DictWriter(output, fieldnames=["timestamp", "session_id", "message"])
+    writer.writeheader()
+    writer.writerows(user_queries_log)
+    
+    return {
+        "csv": output.getvalue(),
+        "total_records": len(user_queries_log)
+    }
 # ═══════════════════════════════════════════════════════════════
 # ← NEW: CLEAR ANALYTICS (for testing/reset)
 # ═══════════════════════════════════════════════════════════════
