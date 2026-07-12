@@ -1083,15 +1083,26 @@ function loadIntelligenceState() {
     }
 }
 // ← NEW: Fetch chart data and enhance message with context
-async function fetchAndEnhanceMessage(userMessage, stockName) {
+async function fetchAndEnhanceMessage(userMessage, loadedStockName) {
     try {
-        console.log("Fetching chart data for:", stockName);
+        // ← NEW: Extract stock name from user message if they mention a different stock
+        let stockToAnalyze = loadedStockName;
         
-        // Get current chart data
-        const response = await fetch(`${API_BASE}/chart-data/${stockName}?period=1y`);
+        // Common stock name patterns
+        const stockNames = ['TCS', 'INFOSYS', 'INFY', 'HDFC', 'HDFCBANK', 'ICICI', 'ICICIBANK', 
+                           'RELIANCE', 'RIL', 'AXIS', 'AXISBANK', 'ITC', 'LT', 'LTNT', 'MARUTI', 
+                           'BAJAJFINSV', 'JSWSTEEL', 'NTPC', 'SBIN', 'WIPRO'];
+        
+        // Check if user is asking about a different stock
+        for (let stock of stockNames) {
+            if (userMessage.toUpperCase().includes(stock)) {
+                stockToAnalyze = stock;
+                break;
+            }
+        }
+        
+        const response = await fetch(`${API_BASE}/chart-data/${stockToAnalyze}?period=1y`);
         const chartData = await response.json();
-        
-        console.log("Chart data received:", chartData);
         
         if (chartData.error) {
             console.log("Chart error, sending normal message");
@@ -1100,16 +1111,20 @@ async function fetchAndEnhanceMessage(userMessage, stockName) {
             return;
         }
         
-        // Enhance message with chart context
-        const enhancedMessage = `User is analyzing ${stockName} stock chart.
+        const enhancedMessage = `User is analyzing ${stockToAnalyze} stock chart.
 
 Current Technical Indicators:
-- RSI: ${chartData.current_rsi} (${chartData.rsi_status})
+- RSI (14): ${chartData.current_rsi} (${chartData.rsi_status})
 - MACD: ${chartData.macd}
 - Current Price: ₹${chartData.current_price}
 - 50 EMA: ₹${chartData.ema_50}
 - 200 EMA: ₹${chartData.ema_200}
 - P/E Ratio: ${chartData.pe_ratio || 'N/A'}
+
+P/E Ratio Context (for interpretation):
+- P/E < 15: Undervalued (good value)
+- P/E 15-25: Fairly valued (reasonable)
+- P/E > 25: Overvalued (expensive)
 
 User Question: "${userMessage}"
 
