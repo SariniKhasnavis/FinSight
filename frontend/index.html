@@ -669,11 +669,17 @@
                   //           message.toLowerCase().includes("tell me") ||
                     //         message.toLowerCase().includes("interpret");
 
-    if (loadedStock  && !sidebarIsHidden) {
+    //if (loadedStock  && !sidebarIsHidden) {
         // Fetch chart data and en  hance message
+      //  await fetchAndEnhanceMessage(message, loadedStock);
+    //} else {
+        // Normal chat
+    //    await sendNormalMessage(message);
+  //  }
+    // ← CHANGE THIS: Always use chart context if stock is loaded (ignore sidebar visibility)
+    if (loadedStock) {
         await fetchAndEnhanceMessage(message, loadedStock);
     } else {
-        // Normal chat
         await sendNormalMessage(message);
     }
 }
@@ -1098,13 +1104,16 @@ async function fetchAndEnhanceMessage(userMessage, stockName) {
         const enhancedMessage = `User is analyzing ${stockName} stock chart.
 
 Current Technical Indicators:
-- RSI (14): ${chartData.current_rsi} (${chartData.rsi_status})
+- RSI: ${chartData.current_rsi} (${chartData.rsi_status})
 - MACD: ${chartData.macd}
 - Current Price: ₹${chartData.current_price}
+- 50 EMA: ₹${chartData.ema_50}
+- 200 EMA: ₹${chartData.ema_200}
+- P/E Ratio: ${chartData.pe_ratio || 'N/A'}
 
 User Question: "${userMessage}"
 
-Based on the chart pattern and technical indicators shown, analyze and explain what the data tells us:`;
+Based on the chart pattern, all technical indicators, and P/E ratio valuation shown, analyze and explain what this means for the stock:`;
         
         console.log("Enhanced message prepared, sending to API");
         
