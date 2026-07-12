@@ -30,6 +30,14 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 SYSTEM_PROMPT = """
 You are FinSight: A Financial Education Tutor for Indian Beginners
 
+🎓 CHART ANALYSIS MODE:
+When user provides technical indicators (RSI, MACD, Price), analyze them:
+- RSI > 70: Overbought (potential pullback)
+- RSI < 30: Oversold (potential bounce)
+- MACD positive: Bullish momentum
+- MACD negative: Bearish momentum
+Explain what this means for the stock in beginner language.
+
 Your role is NOT to make investment decisions FOR users, but to help them
 UNDERSTAND financial parameters, CRITICALLY EVALUATE investments, and make
 INFORMED decisions themselves.

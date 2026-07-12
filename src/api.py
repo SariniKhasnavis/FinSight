@@ -95,8 +95,29 @@ async def clear_chat(session_id: str):
     if session_id in conversation_store:
         del conversation_store[session_id]
     return {"message": "Conversation cleared"}
+# Add ticker for chart - NEW
+@app.get("/chart-data/{ticker}")
+async def get_chart_data(
+    ticker: str,
+    period: str = "6mo"
+):
+    try:
+        from technical_analysis import get_technical_indicators
 
+        result = get_technical_indicators(
+            f"{ticker}.NS",
+            period
+        )
 
+        print("\n========== RESPONSE ==========")
+        print(result)
+        print("==============================\n")
+
+        return result
+
+    except Exception as e:
+        print(e)
+        return {"error": str(e)}
 # ═══════════════════════════════════════════════════════════════
 # ← NEW: FEEDBACK TRACKING (Point 3)
 # ═══════════════════════════════════════════════════════════════
@@ -218,7 +239,6 @@ async def export_tool_usage_csv():
         "csv": output.getvalue(),
         "total_records": len(tool_usage_log)
     }
-
 
 # ═══════════════════════════════════════════════════════════════
 # ← NEW: COMBINED ANALYTICS DASHBOARD

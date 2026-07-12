@@ -6,6 +6,8 @@
     <title>FinSight — AI Financial Markets Agent</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+     <!-- ADD THIS -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -54,6 +56,11 @@
             font-weight: 400;
         }
 
+        .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
         .live-status {
             display: flex;
             align-items: center;
@@ -83,7 +90,7 @@
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 2.5rem;
+            padding: 1rem 2.5rem 0 2.5rem; 
             overflow: hidden;
         }
 
@@ -196,6 +203,34 @@
             align-items: center;
         }
 
+        .toggle-intelligence-btn {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #38bdf8;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.toggle-intelligence-btn:hover {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: #38bdf8;
+}
+
+.toggle-intelligence-btn.active {
+    background: #38bdf8;
+    color: #0a0f1d;
+}
+
+/* Hide sidebar by default */
+.chart-sidebar.hidden {
+    display: none;
+}
         .feedback-btn:hover {
             background: rgba(56, 189, 248, 0.1);
             color: #38bdf8;
@@ -370,7 +405,34 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.1);
         }
-    </style>
+    
+.dashboard-container{display:flex;flex:1;overflow:hidden;max-width:1600px;margin:0 auto;width:100%;padding:0 2rem;}
+.chart-sidebar{width:55%;background:#111827;border-right:1px solid rgba(255,255,255,.08);padding:20px;display:flex;flex-direction:column;gap:18px}
+.chat-section{flex:1;display:flex;min-width:0}
+.chart-container{height:400px;background:#0f172a;border-radius:9px;padding:7px}
+.stock-search{display:flex;gap:10px}
+.stock-search input{flex:1;background:#1f2937;border:1px solid #374151;color:#fff;padding:10px;border-radius:8px}
+.stock-search button{padding:10px 14px}
+.indicators{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.indicator-card{background:#1f2937;border-radius:10px;padding:10px;display:flex;justify-content:space-between}
+.suggestions{padding:12px;border-top:1px solid rgba(255,255,255,.08)}
+
+.analysis-header{
+    margin-bottom:8px;
+}
+
+.analysis-header h3{
+    margin:0;
+    color:#ffffff;
+    font-size:15px;
+    font-weight:600;
+}
+
+.analysis-header span{
+    color:#94A3B8;
+    font-size:13px;
+}
+</style>
 </head>
 <body>
     <div class="header">
@@ -378,14 +440,65 @@
             <span class="logo-main">FinSight</span>
             <span class="logo-sub">by Sarini</span>
         </div>
+        <!-- ← NEW: Toggle button for Stock Intelligence -->
+    <div class="header-right">
+    <button class="toggle-intelligence-btn" onclick="toggleStockIntelligence()" title="Toggle Stock Intelligence">
+        <i data-lucide="bar-chart-3" style="width: 20px; height: 20px;"></i>
+        <span>Stock Metrics</span>
+    </button>
         <div class="live-status">
             <div class="live-dot"></div>
             <span>LIVE</span>
         </div>
     </div>
+    </div>
 
-    <div class="container">
-        <div class="chat-area">
+    
+<div class="dashboard-container">
+  <div class="chart-sidebar hidden" id="chartSidebar">
+    <!-- Stock Intelligence Header -->
+    <div class="analysis-header">
+        <h3>Stock Metrics</h3>
+    </div>
+    <div class="stock-search">
+
+    <input
+        type="text"
+        id="chartStockTicker"
+        placeholder="TCS, RELIANCE, HDFC..."
+    >
+
+    <select id="chartPeriod">
+
+        <option value="1mo">1M</option>
+        <option value="3mo">3M</option>
+        <option value="6mo" selected>6M</option>
+        <option value="1y">1Y</option>
+        <option value="2y">2Y</option>
+        <option value="5y">5Y</option>
+        <option value="max">MAX</option>
+
+    </select>
+
+    <button onclick="loadChartData()">
+        Analyze
+    </button>
+
+</div>
+    <div class="chart-container">
+      <div id="candlestickChart" style="height: 270px;"></div>
+    </div>
+<div class="indicators">
+  <div class="indicator-card"><span class="label">RSI</span><span class="value" id="rsiValue">--</span><span class="status" id="rsiStatus">--</span></div>
+  <div class="indicator-card"><span class="label">Current Price</span><span class="value" id="priceValue">--</span></div>
+  <div class="indicator-card"><span class="label">MACD</span><span class="value" id="macdValue">--</span></div>
+  <div class="indicator-card"><span class="label">50 EMA</span><span class="value" id="ema50Value">--</span></div>
+  <div class="indicator-card"><span class="label">200 EMA</span><span class="value" id="ema200Value">--</span></div>
+  <div class="indicator-card"><span class="label">P/E Ratio</span><span class="value" id="peRatioValue">--</span></div>
+  </div>
+</div>
+  <div class="chat-section">
+<div class="chat-area">
             <div class="chat-messages" id="chatMessages">
                 <div class="message agent">
                     <div class="agent-icon-wrapper">
@@ -430,7 +543,9 @@
                 <span id="fileStatus"></span>
             </div>
         </div>
-    </div>
+    
+</div>
+</div></div>
 
     <script>
         const API_BASE = window.location.origin;
@@ -439,7 +554,8 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             lucide.createIcons();
-        });
+            //loadIntelligenceState();  // ← ADD THIS LINE
+            });
 
         // Update file selection display
         function updateFileSelection() {
@@ -468,54 +584,43 @@
         }
 
         async function sendMessage() {
-            const input = document.getElementById("userInput");
-            const message = input.value.trim();
+    const input = document.getElementById("userInput");
+    const message = input.value.trim();
+    const loadedStock = document.getElementById("chartStockTicker").value;  // ← ADD THIS
+    const sidebar = document.getElementById('chartSidebar');
+    const sidebarIsHidden = sidebar ? sidebar.classList.contains('hidden') : tru
 
-            if (!message) return;
+    if (!message) return;
 
-            // Show file name with message if attached
-            let displayMessage = message;
-            if (selectedFile) {
-                displayMessage += ` [📎 ${selectedFile.name}]`;
-            }
-            addMessage(displayMessage, "user");
-            input.value = "";
+    let displayMessage = message;
+    if (selectedFile) {
+        displayMessage += ` [📎 ${selectedFile.name}]`;
+    }
+    addMessage(displayMessage, "user");
+    input.value = "";
 
-            showLoading();
+    showLoading();
 
-            try {
-                const formData = new FormData();
-                formData.append("message", message);
-                formData.append("session_id", sessionId);
+    // ← NEW: Check if user is asking about chart
+    
+    //const askingAboutChart = message.toLowerCase().includes("chart") || 
+      //                       message.toLowerCase().includes("analyze") ||
+        //                     message.toLowerCase().includes("show") ||
+          //                   message.toLowerCase().includes("what");
+            //                 message.toLowerCase().includes("explain") ||
+              //               message.toLowerCase().includes("information") ||
+                //             message.toLowerCase().includes("understand") ||
+                  //           message.toLowerCase().includes("tell me") ||
+                    //         message.toLowerCase().includes("interpret");
 
-                // Append file if selected
-                if (selectedFile) {
-                    formData.append("file", selectedFile);
-                }
-
-                const response = await fetch(`${API_BASE}/chat`, {
-                    method: "POST",
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                removeLoading();
-                addMessage(data.response, "agent");
-
-                // Clear file after sending
-                selectedFile = null;
-                document.getElementById("docUpload").value = "";
-                document.getElementById("fileStatus").innerHTML = "";
-
-            } catch (error) {
-                removeLoading();
-                addMessage(`⚠️ Error: ${error.message}`, "agent");
-            }
-        }
+    if (loadedStock  && !sidebarIsHidden) {
+        // Fetch chart data and en  hance message
+        await fetchAndEnhanceMessage(message, loadedStock);
+    } else {
+        // Normal chat
+        await sendNormalMessage(message);
+    }
+}
 
         // ← MODIFIED: Add message function with feedback buttons
         function addMessage(text, sender) {
@@ -689,10 +794,329 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function removeLoading() {
+function removeLoading() {
             const loading = document.getElementById("loading");
             if (loading) loading.remove();
         }
+        // Load chart data
+async function loadChartData() {
+    let ticker = document.getElementById('chartStockTicker').value;
+    const period = document.getElementById("chartPeriod").value;
+    
+    if (!ticker) return;
+    
+    // ← NEW: Normalize ticker input
+    // Remove spaces, convert to uppercase, remove special characters
+    ticker = ticker.trim().toUpperCase().replace(/\s+/g, '').replace(/-/g, '');
+    
+    // Common stock name mappings
+    const stockMappings = {
+        'HDFCBANK': 'HDFCBANK',
+        'ICICIBANK': 'ICICIBANK',
+        'AXISBANK': 'AXISBANK',
+        'TCS': 'TCS',
+        'INFOSYS': 'INFOSYS',
+        'INFY': 'INFOSYS',
+        'RELIANCE': 'RELIANCE',
+        'RIL': 'RELIANCE',
+        'HDFC': 'HDFCBANK',
+        'ICICI': 'ICICIBANK',
+        'AXIS': 'AXISBANK',
+        'ITC': 'ITC',
+        'ASHOKLEY': 'Ashok Leyland',
+        'ETERNAL': 'Zomato',
+        'LTNT': 'LT',
+        'MARUTI': 'MARUTI',
+        'BAJAJFINSV': 'BAJAJFINSV',
+        'JSWSTEEL': 'JSWSTEEL',
+        'NTPC': 'NTPC',
+        'SBIN': 'SBIN',
+        'BEL': 'Bharat electonics'
+    };
+    
+    // Map common aliases to actual ticker
+    ticker = stockMappings[ticker] || ticker;
+    
+    try {
+        const response = await fetch(
+            `${API_BASE}/chart-data/${ticker}?period=${period}`
+        );
+        const data = await response.json();
+        
+        if (data.error) {
+            alert("Error loading chart data");
+            return;
+        }
+        
+        // Update indicators
+        document.getElementById('rsiValue').textContent = data.current_rsi;
+        document.getElementById('rsiStatus').textContent = data.rsi_status;
+        document.getElementById('priceValue').textContent = `₹${data.current_price}`;
+        document.getElementById('macdValue').textContent = data.macd;
+        
+        // ← NEW: Update new indicator fields
+        document.getElementById('ema50Value').textContent = `₹${data.ema_50}`;
+        document.getElementById('ema200Value').textContent = `₹${data.ema_200}`;
+        document.getElementById('peRatioValue').textContent = data.pe_ratio || 'N/A';
+        
+        // Draw candlestick chart (using Plotly)
+        drawCandlestickChart(data.candlestick_data);
+        
+        // Generate follow-up suggestions
+        generateSuggestions(ticker);
+        
+    } catch (error) {
+        console.error("Chart error:", error);
+    }
+}
+
+// Draw candlestick chart using Plotly
+function drawCandlestickChart(data) {
+
+    const trace = {
+        x: data.map(d => d.date),
+        open: data.map(d => d.open),
+        high: data.map(d => d.high),
+        low: data.map(d => d.low),
+        close: data.map(d => d.close),
+        type: "candlestick",
+
+        increasing: {
+            line: { color: "#22c55e" },
+            fillcolor: "#22c55e"
+        },
+
+        decreasing: {
+            line: { color: "#ef4444" },
+            fillcolor: "#ef4444"
+        }
+    };
+    
+
+    const layout = {
+
+        autosize: true,
+        height: 240,
+        dragmode:"zoom",
+
+        margin: {
+            l: 35,
+            r: 15,
+            t: 10,
+            b: 20
+        },
+
+        paper_bgcolor: "#111827",
+        plot_bgcolor: "#111827",
+
+        font: {
+            color: "#CBD5E1"
+        },
+
+        showlegend: false,
+
+        xaxis: {
+    showgrid: true,
+    gridcolor: "#1E293B",
+
+    rangeslider: {
+        visible: true
+    },
+
+    fixedrange: false,
+
+    showline: false,
+    zeroline: false,
+
+    title: ""
+},
+
+        yaxis: {
+            showgrid: true,
+            gridcolor: "#1E293B",
+
+            showline: false,
+            zeroline: false,
+
+            title: ""
+        }
+
+    };
+
+    Plotly.react(
+        "candlestickChart",
+        [trace],
+        layout,
+        {
+            responsive: true,
+            displayModeBar: true
+        }
+    );
+
+}
+
+// Generate follow-up suggestions
+function generateSuggestions(ticker){
+
+    const container=document.getElementById("suggestionButtons");
+
+    if(!container) return;
+
+    const suggestions=[
+        `Explain the PE ratio of ${ticker}`,
+        `Compare ${ticker} with competitors`,
+        `Show dividend history of ${ticker}`,
+        `Latest news about ${ticker}`
+    ];
+
+    container.innerHTML=suggestions.map(s=>`
+        <button onclick="setMessage('${s}')">
+            ${s}
+        </button>
+    `).join("");
+
+}
+
+// Set message and send
+function setMessage(text) {
+    document.getElementById('userInput').value = text;
+    sendMessage();
+}
+// ← NEW: Toggle Stock Intelligence visibility
+function toggleStockIntelligence() {
+    const sidebar = document.getElementById('chartSidebar');
+    const btn = document.querySelector('.toggle-intelligence-btn');
+    
+    console.log('Sidebar:', sidebar);
+    console.log('Button:', btn);
+    
+    if (!sidebar) {
+        console.error('Sidebar not found!');
+        return;
+    }
+    
+    if (!btn) {
+        console.error('Button not found!');
+        return;
+    }
+    
+    sidebar.classList.toggle('hidden');
+    btn.classList.toggle('active');
+    
+    localStorage.setItem('intelligenceVisible', !sidebar.classList.contains('hidden'));
+    console.log('Toggle executed');
+}
+
+// ← NEW: Load saved preference on page load
+function loadIntelligenceState() {
+    const sidebar = document.getElementById('chartSidebar');
+    const btn = document.querySelector('.toggle-intelligence-btn');
+    
+    if (!sidebar || !btn) return;
+    
+    const isVisible = localStorage.getItem('intelligenceVisible');
+    if (isVisible === 'true') {
+        sidebar.classList.remove('hidden');
+        btn.classList.add('active');
+    }
+}
+// ← NEW: Fetch chart data and enhance message with context
+async function fetchAndEnhanceMessage(userMessage, stockName) {
+    try {
+        console.log("Fetching chart data for:", stockName);
+        
+        // Get current chart data
+        const response = await fetch(`${API_BASE}/chart-data/${stockName}?period=1y`);
+        const chartData = await response.json();
+        
+        console.log("Chart data received:", chartData);
+        
+        if (chartData.error) {
+            console.log("Chart error, sending normal message");
+            removeLoading();
+            await sendNormalMessage(userMessage);
+            return;
+        }
+        
+        // Enhance message with chart context
+        const enhancedMessage = `User is analyzing ${stockName} stock chart.
+
+Current Technical Indicators:
+- RSI (14): ${chartData.current_rsi} (${chartData.rsi_status})
+- MACD: ${chartData.macd}
+- Current Price: ₹${chartData.current_price}
+
+User Question: "${userMessage}"
+
+Based on the chart pattern and technical indicators shown, analyze and explain what the data tells us:`;
+        
+        console.log("Enhanced message prepared, sending to API");
+        
+        const formData = new FormData();
+        formData.append("message", enhancedMessage);
+        formData.append("session_id", sessionId);
+
+        const chatResponse = await fetch(`${API_BASE}/chat`, {
+            method: "POST",
+            body: formData
+        });
+
+        console.log("Chat response status:", chatResponse.status);
+
+        if (!chatResponse.ok) {
+            throw new Error(`API error: ${chatResponse.statusText}`);
+        }
+
+        const data = await chatResponse.json();
+        console.log("Chat response received:", data);
+        
+        removeLoading();
+        addMessage(data.response, "agent");
+
+        selectedFile = null;
+        document.getElementById("docUpload").value = "";
+        document.getElementById("fileStatus").innerHTML = "";
+
+    } catch (error) {
+        console.error("Chart fetch error:", error);
+        removeLoading();
+        addMessage(`⚠️ Error: ${error.message}`, "agent");
+    }
+}
+
+// ← NEW: Send normal message (existing logic)
+async function sendNormalMessage(userMessage) {
+    try {
+        const formData = new FormData();
+        formData.append("message", userMessage);
+        formData.append("session_id", sessionId);
+
+        if (selectedFile) {
+            formData.append("file", selectedFile);
+        }
+
+        const response = await fetch(`${API_BASE}/chat`, {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error(`API error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        removeLoading();
+        addMessage(data.response, "agent");
+
+        selectedFile = null;
+        document.getElementById("docUpload").value = "";
+        document.getElementById("fileStatus").innerHTML = "";
+
+    } catch (error) {
+        removeLoading();
+        addMessage(`⚠️ Error: ${error.message}`, "agent");
+    }
+}
     </script>
 </body>
 </html>
