@@ -1,5 +1,6 @@
 # tools.py — Data fetching layer for the financial agent
 
+from yahooquery import search
 import yfinance as yf
 import feedparser
 import requests
@@ -20,19 +21,66 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 import difflib
 import os
 
+
 load_dotenv()
 
+def resolve_stock_ticker(stock_name: str):
+
+    stock_name = stock_name.strip().upper()
+
+    if stock_name.endswith(".NS"):
+        return stock_name
+
+    try:
+        results = search(stock_name)
+
+        for quote in results.get("quotes", []):
+
+            symbol = quote.get("symbol", "")
+            exchange = quote.get("exchange", "")
+
+            if symbol.endswith(".NS"):
+                return symbol
+
+            if exchange == "NSI":
+                return symbol + ".NS"
+
+        return None
+
+    except Exception:
+        return None
 # ─────────────────────────────────────────
 # TOOL 1 — Get current stock data
 # ─────────────────────────────────────────
-def get_stock_data(ticker: str) -> dict:
+def get_stock_data(stock_input: str) -> dict:
     """
-    Fetches current price and key metrics for a stock.
-    ticker: NSE symbol like RELIANCE.NS, TCS.NS, INFY.NS
+    Fetches current price and key metrics.
+
+    Accepts:
+    - Company name (Adani Power)
+    - NSE ticker (ADANIPOWER)
+    - Yahoo ticker (ADANIPOWER.NS)
+
+    Automatically resolves to the correct Yahoo Finance ticker.
     """
+
     try:
+        # Resolve to Yahoo ticker
+        ticker = resolve_stock_ticker(stock_input)
+
+        if ticker is None:
+            return {
+                "error": f"Could not find stock '{stock_input}'."
+            }
+
         stock = yf.Ticker(ticker)
         info = stock.info
+
+        if not info or info.get("longName") is None:
+            return {
+                "error": f"No market data found for '{stock_input}'."
+            }
+
         return {
             "ticker": ticker,
             "company_name": info.get("longName", "N/A"),
@@ -48,6 +96,7 @@ def get_stock_data(ticker: str) -> dict:
             "sector": info.get("sector", "N/A"),
             "industry": info.get("industry", "N/A"),
         }
+
     except Exception as e:
         return {"error": str(e)}
 
