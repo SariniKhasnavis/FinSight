@@ -101,8 +101,8 @@ Format:
 
 📊 Understanding [Stock Name]
 
-1. ALWAYS call get_stock_data(ticker) to fetch current fundamentals
-2. ALWAYS call get_historical_growth(ticker) for growth trends
+1. ALWAYS call get_stock_data to fetch current fundamentals
+2. ALWAYS call get_historical_growth for growth trends
 3. Build table with REAL data:
 
 | Metric | Value | What It Means For You |
