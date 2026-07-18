@@ -166,59 +166,32 @@ def generate_news_insight(headline: str, company: str) -> str:
     return insight
 def get_stock_news(query: str) -> list[dict]:
     """
-    Fetches latest news using NewsAPI with summaries and insights.
-    Returns headline, summary, source, date, and insight about stock impact.
-    Prioritizes last 6 months of news.
-    query: company name or ticker e.g. 'Reliance Industries' or 'TCS'
+    Fetch news for a stock using Google News RSS feed.
+    Works for any time period (no 30-day limit).
     """
     try:
-        api_key = os.getenv("NEWSAPI_KEY")
+        import feedparser
         
-        if not api_key:
-            return [{"error": "NewsAPI key not configured"}]
+        # Google News RSS feed for stock query
+        url = f"https://news.google.com/rss/search?q={query}+stock&hl=en-US&gl=US&ceid=US:en"
         
-        # Clean query - remove .NS suffix if present
-        clean_query = query.replace(".NS", "").replace(".BO", "").strip()
+        feed = feedparser.parse(url)
         
-        # NewsAPI query with date filter for last 6 months
-        from datetime import datetime, timedelta
-        six_months_ago = (datetime.now() - timedelta(days=180)).strftime("%Y-%m-%d")
+        if not feed.entries:
+            return [{"error": f"No news found for {query}"}]
         
-        url = f"https://newsapi.org/v2/everything?q={clean_query} stock India&sortBy=publishedAt&language=en&from={six_months_ago}&pageSize=5&apiKey={api_key}"
-        
-        response = requests.get(url, timeout=10)
-        data = response.json()
-        
-        if data.get("status") != "ok":
-            return [{"error": f"NewsAPI error: {data.get('message', 'Unknown error')}"}]
-        
-        articles = data.get("articles", [])
-        
-        if not articles:
-            return [{"error": f"No recent news found for {query}"}]
-        
-        news = []
-        for article in articles[:5]:
-            title = str(article.get("title", "No title"))
-            summary = str(article.get("description", "No summary"))
-            source = str(article.get("source", {}).get("name", "Unknown"))
-            published = str(article.get("publishedAt", "No date")[:10])  # Date only
-            link = str(article.get("url", "No link"))
-            
-            # Generate insight
-            insight = generate_news_insight(f"{title} {summary}", query)
-            
-            news.append({
-                "title": title,
-                "summary": summary,
-                "source": source,
-                "published": published,
-                "link": link,
-                "insight": insight
+        results = []
+        for entry in feed.entries[:5]:  # Top 5 articles
+            results.append({
+                "title": entry.get('title', 'N/A'),
+                "source": entry.get('source', {}).get('title', 'Google News'),
+                "published": entry.get('published', 'Unknown'),
+                "description": entry.get('summary', 'N/A')[:200],  # Short summary
+                "url": entry.get('link', '')
             })
         
-        return news if news else [{"error": "No news found"}]
-
+        return results
+        
     except Exception as e:
         return [{"error": f"Failed to fetch news: {str(e)}"}]
 
@@ -286,7 +259,7 @@ def get_mutual_fund_nav(fund_name: str) -> list[dict]:
     try:
         # STEP 1: Search the master list to find matching funds and their scheme codes
         master_url = "https://api.mfapi.in/mf"
-        master_response = requests.get(master_url, timeout=10)
+        master_response = requests.get(master_url, timeout=30)
         
         if master_response.status_code != 200:
             return [{"error": "Failed to fetch master scheme list from MFAPI."}]
@@ -310,7 +283,7 @@ def get_mutual_fund_nav(fund_name: str) -> list[dict]:
             
             # STEP 2: Fetch the full timeline history for this specific scheme code
             history_url = f"https://api.mfapi.in/mf/{scheme_code}"
-            history_response = requests.get(history_url, timeout=10)
+            history_response = requests.get(history_url, timeout=30)
             
             if history_response.status_code != 200:
                 continue
@@ -388,7 +361,7 @@ def get_economic_indicators() -> dict:
 
         for name, code in indicators.items():
             url = f"{base_url}/{code}?format=json&mrv=1"
-            response = requests.get(url, timeout=10)
+            response = requests.get(url, timeout=30)
             data = response.json()
 
             if len(data) > 1 and data[1]:
