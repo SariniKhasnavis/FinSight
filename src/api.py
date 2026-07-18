@@ -5,6 +5,7 @@ import os
 import json
 import datetime
 from collections import Counter
+from src.agent import run_agent
 
 # Add src to path so imports work
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
