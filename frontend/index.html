@@ -1115,6 +1115,11 @@ function drawCandlestickChart(data) {
             displayModeBar: true
         }
     );
+    if (window.innerWidth <= 768) {
+        document.getElementById("candlestickChart").style.marginTop = "25px";
+    } else {
+        document.getElementById("candlestickChart").style.marginTop = "0";
+    }
 
 }
 
