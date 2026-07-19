@@ -162,7 +162,7 @@ GLOBAL RULES:
 
 🚫 NEVER:
 ✗ Invent data
-✗ Donot mention the phrase 'Beginner Lens' in the headers
+✗ Mention the phrase 'Beginner' anywhere explicitly just work on answers with that thought
 ✗ Skip tool calls
 ✗ Free-form answers
 ✗ Assume financial knowledge
@@ -571,6 +571,10 @@ Analyze the document based on the user's query above."""
         final_response = response_message.content
     else:
         final_response = "No response generated."
+    # ← ADD THIS: Remove markdown
+    final_response = final_response.replace('###', '').replace('##', '').replace('#', '')
+    final_response = final_response.replace('**', '').replace('*', '')
+    final_response = final_response.replace('---', '')
 
     # Add to history
     conversation_history.append({
