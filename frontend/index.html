@@ -583,6 +583,39 @@
     .message-content code{
         white-space: pre;
     }   
+    /* Make indicator cards smaller on mobile */
+    .indicators{
+        gap: 6px;
+    }
+
+    .indicator-card{
+        padding: 6px;
+        border-radius: 8px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;      /* increase spacing between label/value/status */
+        min-height: 42px;   /* Increase height */
+    }
+
+    /* Labels */
+    .indicator-card .label{
+        font-size: 0.68rem;
+        line-height: 1.1;
+    }
+
+    /* Values */
+    .indicator-card .value{
+        font-size: 0.68rem;
+        font-weight: 600;
+    }
+
+    /* RSI status */
+    .indicator-card .status{
+        font-size: 0.65rem;
+        line-height: 1.1;
+    }
 }
 </style>
 </head>
@@ -655,7 +688,7 @@
                     </div>
                     <div class="message-content-wrapper">
                         <div class="message-content">
-                            Hello! I'm your stock market assistant. Ask me about stock prices, market trends, funds comparisons, or documents analysis.
+                            Hello! I'm your stock market assistant. Ask me about stock prices, market trends & news, funds comparisons, or documents analysis.
                         </div>
                         <div class="message-time">09:41</div>
                     </div>
@@ -1055,17 +1088,17 @@ function drawCandlestickChart(data) {
         }
     };
     
-
+    const isMobile = window.innerWidth <= 768;
     const layout = {
 
         autosize: true,
-        height: 240,
+        height: isMobile ? 260 : 240,
         dragmode:"zoom",
 
         margin: {
             l: 35,
             r: 15,
-            t: 10,
+            t: isMobile ? 40 : 10,
             b: 20
         },
 
@@ -1116,7 +1149,7 @@ function drawCandlestickChart(data) {
         }
     );
     if (window.innerWidth <= 768) {
-        document.getElementById("candlestickChart").style.marginTop = "25px";
+        document.getElementById("candlestickChart").style.marginTop = "35px";
     } else {
         document.getElementById("candlestickChart").style.marginTop = "0";
     }
