@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>FinSight — AI Financial Markets Agent</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -184,33 +184,33 @@
         }
 
         .toggle-intelligence-btn {
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    color: #38bdf8;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-}
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #38bdf8;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
 
-.toggle-intelligence-btn:hover {
-    background: rgba(56, 189, 248, 0.2);
-    border-color: #38bdf8;
-}
+        .toggle-intelligence-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+        }
 
-.toggle-intelligence-btn.active {
-    background: #38bdf8;
-    color: #0a0f1d;
-}
+        .toggle-intelligence-btn.active {
+            background: #38bdf8;
+            color: #0a0f1d;
+        }
 
-/* Hide sidebar by default */
-.chart-sidebar.hidden {
-    display: none;
-}
+        /* Hide sidebar by default */
+        .chart-sidebar.hidden {
+            display: none;
+        }
         .feedback-btn:hover {
             background: rgba(56, 189, 248, 0.1);
             color: #38bdf8;
@@ -535,8 +535,14 @@
     }
     /* Message content */
     .message-content{
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        width:100%;
+        max-width:100%;
+        overflow-x:hidden;
+        overflow-wrap:anywhere;
+        word-break:break-word;
+    }
+    .message-content table{
+        max-width:none;
     }
 
     /* Tables */
@@ -569,8 +575,10 @@
     .message-content p,
     .message-content ul,
     .message-content ol{
-        white-space: pre-wrap;
-        overflow-x: auto;
+        white-space:normal;
+        overflow-wrap:anywhere;
+        word-break:break-word;
+        max-width:100%;
     }
 
     /* Code blocks */
@@ -931,8 +939,8 @@
             if (headers.length === 0) return '';
 
             let html = `
-                <div style="background: #111827; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; margin: 1rem 0;">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <div style="background: #111827; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; margin: 1rem 0;">
+                    <table style="width:max-content;min-width:100%;border-collapse:collapse;font-size:0.9rem;">
                         <thead>
                             <tr style="background: #1f2937; border-bottom: 1px solid rgba(255,255,255,0.1);">`;
 
