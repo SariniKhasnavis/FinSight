@@ -175,7 +175,10 @@ def get_stock_news(query: str) -> list[dict]:
         # Google News RSS feed for stock query
         url = f"https://news.google.com/rss/search?q={query}+stock&hl=en-US&gl=US&ceid=US:en"
         
-        feed = feedparser.parse(url)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+        feed = feedparser.parse(url, request_headers=headers)
         
         if not feed.entries:
             return [{"error": f"No news found for {query}"}]
