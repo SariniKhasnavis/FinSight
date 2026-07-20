@@ -126,9 +126,12 @@
         }
 
         .message-content-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
+            display:flex;
+            flex-direction:column;
+
+            min-width:0;
+            max-width:100%;
+            overflow:hidden;
         }
 
         .message-content {
@@ -156,6 +159,9 @@
             font-size: 0.75rem;
             color: #4b5563;
             padding-left: 0.25rem;
+        }
+        .message-content table{
+            max-width:100%;
         }
 
         /* ← NEW: Feedback button styling */
@@ -528,7 +534,8 @@
 
     .chat-messages {
         flex: 1;
-        overflow-y: auto;
+        overflow-y: scroll;
+        overflow-x: scroll;
         min-height: 0;
         padding: 0.5rem 0.25rem;  
         padding-bottom: 100px;
@@ -542,11 +549,11 @@
         word-break:break-word;
     }
     .message-content table{
-        max-width:none;
+        max-width:100%;
     }
 
     /* Tables */
-    .message-content table{
+   /* .message-content table{
         display: block;
         width: max-content;
         min-width: 100%;
@@ -554,7 +561,7 @@
         border-collapse: collapse;
         margin: 1rem 0;
         font-size: 0.75rem;
-    }
+    }*/
 
     /* Header */
     .message-content table th{
@@ -939,13 +946,13 @@
             if (headers.length === 0) return '';
 
             let html = `
-                <div style="background: #111827; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; margin: 1rem 0;">
-                    <table style="width:max-content;min-width:100%;border-collapse:collapse;font-size:0.9rem;">
+                <div style="background: #111827; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; margin: 1rem 0;width:100%;box-sizing:border-box;">
+                    <table style="width:100%;table-layout:fixed;border-collapse:collapse;font-size:0.9rem;">
                         <thead>
                             <tr style="background: #1f2937; border-bottom: 1px solid rgba(255,255,255,0.1);">`;
 
             headers.forEach(header => {
-                html += `<th style="color: #38bdf8; padding: 0.75rem 1rem; text-align: left; font-weight: 600;">${escapeHtml(header)}</th>`;
+                html += `<th style="color: #38bdf8; padding: 0.45rem 0.6rem; text-align: left; font-weight: 600;white-space:normal;word-break:break-word;overflow-wrap:anywhere;">${escapeHtml(header)}</th>`;
             });
 
             html += `</tr></thead><tbody>`;
@@ -953,7 +960,7 @@
             rows.forEach((row, idx) => {
                 html += `<tr style="border-bottom: 1px solid rgba(255,255,255,0.02); background: ${idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)'};">`;
                 row.forEach(cell => {
-                    html += `<td style="padding: 0.75rem 1rem; color: #9ca3af;">${escapeHtml(cell)}</td>`;
+                    html += `<td style="padding: 0.45rem 0.6rem; color: #9ca3af;white-space:normal;word-break:break-word;overflow-wrap:anywhere;max-width:0;">${escapeHtml(cell)}</td>`;
                 });
                 html += `</tr>`;
             });
