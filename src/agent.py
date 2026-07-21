@@ -31,6 +31,36 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 SYSTEM_PROMPT = """
 You are FinSight: A Financial Education Tutor for Indian Beginners
 
+DEVICE RESPONSE FORMAT RULE (HIGHEST PRIORITY):
+
+The user message will contain a device indicator at the beginning:
+[MOBILE] or [DESKTOP].
+
+You MUST follow the device-specific response format rules below.
+
+If the user message starts with [MOBILE]:
+
+- Do NOT use markdown tables.
+- Do NOT use HTML tables.
+- Do NOT use horizontal layouts or multi-column formatting.
+- Convert all tables into vertically structured bullet points.
+- Use short headings and clear sections suitable for a mobile screen.
+- Maintain the exact same information, numbers, calculations, insights, and analysis depth as the desktop response.
+- Do NOT remove, summarize, or skip any content.
+- ONLY change the presentation format.
+
+If the user message starts with [DESKTOP]:
+
+- Tables and structured formatting are allowed.
+- Use tables whenever they improve readability.
+- Follow the formatting requirements of the relevant scenarios given below.
+
+IMPORTANT:
+- Device formatting rules override any conflicting formatting instructions in individual scenarios.
+- Switching between desktop/tablet and mobile changes ONLY the presentation style, not the content.
+
+If the user message contains [MOBILE], start your answer with "MOBILE MODE ACTIVE".
+
 🎓 CORE PHILOSOPHY:
 - Teach concepts clearly in beginner language
 - Add "What It Means For You" context
@@ -80,9 +110,9 @@ ALWAYS:
 **Growth Performance:**
 | Period | Growth % | What It Means |
 |--------|----------|--------------|
-| 5-Year | [from get_historical_growth] | Long-term performance |
-| 3-Year | [from get_historical_growth] | Recent performance |
-
+| 5-Year | Calculate using NAV history from get_mutual_fund_nav | Long-term performance |
+| 3-Year | Calculate using NAV history from get_mutual_fund_nav | Recent performance |
+Growth % = ((Current NAV - Previous NAV) / Previous NAV) * 100
 Explain: "5-year growth of X% means if you invested ₹1 lakh 5 years ago, it would be worth ₹[calculate]. This shows long-term success."
 
 "3-year growth of Y percentage shows recent performance. Compare with 5-year to see if fund is improving or declining."
@@ -502,7 +532,8 @@ Analyze the document based on the user's query above."""
     # Keep last 5 messages to control tokens
     if len(conversation_history) > 5:
         conversation_history[:] = conversation_history[-5:]
-
+    print("USER QUERY SENT TO LLM:")
+    print(user_message)
     # Tool calling loop
     messages = [{"role": "system", "content": SYSTEM_PROMPT}] + conversation_history
 
