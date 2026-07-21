@@ -552,47 +552,47 @@
         max-width:100%;
     }
 
-    /* Tables */
-   /* .message-content table{
-        display: block;
-        width: max-content;
-        min-width: 100%;
-        overflow-x: auto;
-        border-collapse: collapse;
-        margin: 1rem 0;
-        font-size: 0.75rem;
-    }*/
+        /* Tables */
+    /* .message-content table{
+            display: block;
+            width: max-content;
+            min-width: 100%;
+            overflow-x: auto;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.75rem;
+        }*/
 
-    /* Header */
-    .message-content table th{
-        background: rgba(56,189,248,0.1);
-        padding: 0.5rem;
-        white-space: nowrap;
-        border: 1px solid rgba(255,255,255,0.1);
-    }
+        /* Header */
+        .message-content table th{
+            background: rgba(56,189,248,0.1);
+            padding: 0.5rem;
+            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
 
-    /* Cells */
-    .message-content table td{
-        padding: 0.5rem;
-        white-space: nowrap;
-        border: 1px solid rgba(255,255,255,0.1);
-    }
+        /* Cells */
+        .message-content table td{
+            padding: 0.5rem;
+            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
 
-    /* Paragraphs */
-    .message-content p,
-    .message-content ul,
-    .message-content ol{
-        white-space:normal;
-        overflow-wrap:anywhere;
-        word-break:break-word;
-        max-width:100%;
-    }
+        /* Paragraphs */
+        .message-content p,
+        .message-content ul,
+        .message-content ol{
+            white-space:normal;
+            overflow-wrap:anywhere;
+            word-break:break-word;
+            max-width:100%;
+        }
 
-    /* Code blocks */
-    .message-content pre{
-        overflow-x: auto;
-        white-space: pre;
-    }
+        /* Code blocks */
+        .message-content pre{
+            overflow-x: auto;
+            white-space: pre;
+        }
 
     /* Inline code */
     .message-content code{
@@ -748,6 +748,12 @@
         const API_BASE = window.location.origin;
         let sessionId = `session_${Date.now()}`;
         let selectedFile = null;
+        // ← NEW FUNCTION
+        function isMobileDevice() {
+            return window.innerWidth <= 768 || /mobile|android|iphone/i.test(navigator.userAgent);
+        }
+        window.isMobile = isMobileDevice();
+        window.deviceType = window.isMobile ? "MOBILE" : "DESKTOP";
 
         document.addEventListener("DOMContentLoaded", () => {
             lucide.createIcons();
@@ -818,10 +824,11 @@
     //    await sendNormalMessage(message);
   //  }
     // ← CHANGE THIS: Always use chart context if stock is loaded (ignore sidebar visibility)
+    const isMobile = isMobileDevice();  //← ADD THIS LINE
     if (loadedStock) {
-        await fetchAndEnhanceMessage(message, loadedStock);
+        await fetchAndEnhanceMessage(message, loadedStock, isMobile);  //# ← ADD isMobile parameter
     } else {
-        await sendNormalMessage(message);
+        await sendNormalMessage(message, isMobile);  //# ← ADD isMobile parameter
     }
 }
 
@@ -1237,7 +1244,7 @@ function loadIntelligenceState() {
     }
 }
 // ← NEW: Fetch chart data and enhance message with context
-async function fetchAndEnhanceMessage(userMessage, loadedStockName) {
+async function fetchAndEnhanceMessage(userMessage, loadedStockName, isMobile) {  // ← ADD isMobile parameter
     try {
         // ← NEW: Extract stock name from user message if they mention a different stock
         let stockToAnalyze = loadedStockName;
@@ -1265,7 +1272,8 @@ async function fetchAndEnhanceMessage(userMessage, loadedStockName) {
             return;
         }
         
-        const enhancedMessage = `User is analyzing ${stockToAnalyze} stock chart.
+        const deviceType = window.deviceType;  // ← ADD THIS
+        const enhancedMessage = `[${deviceType}] User is analyzing ${stockToAnalyze} stock chart.
 
 Current Technical Indicators:
 - RSI (14): ${chartData.current_rsi} (${chartData.rsi_status})
@@ -1284,7 +1292,9 @@ User Question: "${userMessage}"
 
 Based on the chart pattern, all technical indicators, and P/E ratio valuation shown, analyze and explain what this means for the stock:`;
         
-        console.log("Enhanced message prepared, sending to API");
+        console.log("Enhanced message prepared:", enhancedMessage);
+        console.log("isMobile received:", isMobile);
+        console.log("deviceType:", deviceType);
         
         const formData = new FormData();
         formData.append("message", enhancedMessage);
@@ -1319,10 +1329,13 @@ Based on the chart pattern, all technical indicators, and P/E ratio valuation sh
 }
 
 // ← NEW: Send normal message (existing logic)
-async function sendNormalMessage(userMessage) {
+async function sendNormalMessage(userMessage, isMobile) {
     try {
         const formData = new FormData();
-        formData.append("message", userMessage);
+        const deviceType = window.deviceType;
+        const enhancedMessage = `[${deviceType}] ${userMessage}`;
+
+        formData.append("message", enhancedMessage);
         formData.append("session_id", sessionId);
 
         if (selectedFile) {
