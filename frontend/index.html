@@ -189,6 +189,36 @@
             align-items: center;
         }
 
+        .new-chat-btn {
+            height: 40px;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            background: rgba(15, 23, 42, 0.7);
+            color: #cbd5e1;
+
+            border: 1px solid rgba(96, 165, 250, 0.25);
+            border-radius: 9px;
+
+            font-size: 14px;
+            font-weight: 500;
+
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .new-chat-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .new-chat-btn:hover {
+            background: rgba(37, 99, 235, 0.15);
+            border-color: rgba(56, 189, 248, 0.5);
+            color: #f8fafc;
+        }
         .toggle-intelligence-btn {
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid rgba(56, 189, 248, 0.3);
@@ -313,6 +343,7 @@
             flex-shrink: 0;
         }
 
+        .input-container textarea,
         .input-container input {
             flex: 1;
             background: none;
@@ -323,15 +354,30 @@
             height: 100%;
             outline: none;
             padding: 0;
-            display: flex;
-            align-items: center;
+            resize: none;
+        }
+        
+        .input-container textarea {
+            padding: 0.6rem 0 !important;  
+            line-height: 1.4;
         }
 
+        .input-container textarea::placeholder,
         .input-container input::placeholder {
             color: #4b5563;
             opacity: 1;
         }
 
+        .stock-search-box {
+            position: relative;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stock-search-box input {
+            width: 100%;
+            box-sizing: border-box;
+        }
         .btn-send {
             background-color: rgba(30, 41, 59, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -392,11 +438,76 @@
             background: rgba(255, 255, 255, 0.1);
         }
     
+        /* ===== CHAT INPUT IMPROVEMENTS ===== */
+
+.chat-area .input-area {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.chat-area .input-container {
+    min-height: 70px;
+    box-sizing: border-box;
+
+    background: #0d1627;
+
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    border-radius: 12px;
+
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.chat-area .input-container:focus-within {
+    border-color: #38bdf8;
+
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.08);
+}
+
+.chat-area .input-container textarea {
+    background: transparent;
+    border: none;
+    outline: none;
+
+    color: #f8fafc;
+
+    font-family: inherit;
+}
+
+.chat-area .input-container textarea::placeholder {
+    color: #64748b;
+}
 .dashboard-container{display:flex;flex:1;overflow:hidden;max-width:1600px;margin:0 auto;width:100%;padding:0 2rem;}
 .chart-sidebar{width:55%;background:#111827;border-right:1px solid rgba(255,255,255,.08);padding:20px;display:flex;flex-direction:column;gap:18px}
+.stock-metrics-header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #f8fafc;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.stock-metrics-header svg {
+    width: 20px;
+    height: 20px;
+    color: #b0bc07;
+    stroke-width: 2;
+}
 
 @media (max-width:768px){
 .chart-sidebar{width:100%;position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;border-right:none;padding:60px 20px 20px 20px;overflow-y:auto}
+.stock-metrics-header {
+    font-size: 14px;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.stock-metrics-header svg {
+    width: 17px;
+    height: 17px;
+}
 .chart-sidebar.hidden{display:none}
 .chat-section{display:none}
 .chart-sidebar:not(.hidden) ~ .chat-section{display:none}
@@ -406,11 +517,116 @@
 .chat-section{flex:1;display:flex;min-width:0}
 .chart-container{height:400px;background:#0f172a;border-radius:9px;padding:7px}
 .stock-search{display:flex;gap:10px}
-.stock-search input{flex:1;background:#1f2937;border:1px solid #374151;color:#fff;padding:10px;border-radius:8px}
-.stock-search button{padding:10px 14px}
+.stock-search input{flex:1;background:#0c1118;border:1px solid #5d7eb2;color:#fff;padding:10px;border-radius:8px}
+.stock-search select {
+    background: #1f2937;
+    color: #fff;
+    border: 1px solid #374151;
+    padding: 11px 12px;
+    border-radius: 9px;
+}
+.stock-search button {
+    padding: 10px 16px;
+    border: 1px solid #38bdf8;
+    border-radius: 9px;
+    background: #38bdf8;
+    color: #0a0f1d;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+}
+
+.stock-search button:hover {
+    background: #7dd3fc;
+    border-color: #7dd3fc;
+/*    box-shadow: 0 0 18px rgba(56, 189, 248, 0.35);*/
+    transform: translateY(-1px);
+}
+
+.stock-search button:active {
+    transform: translateY(0);
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+}
 .indicators{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.indicator-card{background:#1f2937;border-radius:10px;padding:10px;display:flex;justify-content:space-between}
+.indicator-card {
+    background: linear-gradient(135deg, #162235, #111c2d);
+    border: 1px solid rgba(96, 165, 250, 0.12);
+    border-radius: 11px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 68px;
+    box-sizing: border-box;
+}
+.metric-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(59, 130, 246, 0.12);
+    color: #60a5fa;
+}
+
+.metric-icon svg {
+    width: 20px;
+    height: 20px;
+}
+.metric-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.metric-name {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #cbd5e1;
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+.metric-value {
+    color: #f8fafc;
+    font-size: 18px;
+    font-weight: 600;
+}
+.metric-icon {
+    background: rgba(139, 92, 246, 0.12);
+    color: #a855f7;
+}
+
+.price-icon {
+    background: rgba(14, 165, 233, 0.12);
+    color: #38bdf8;
+}
+
+.macd-icon {
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+}
+
+.ema50-icon {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+}
+
+.ema200-icon {
+    background: rgba(234, 179, 8, 0.12);
+    color: #facc15;
+}
+
+.pe-icon {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+}
 .suggestions{padding:12px;border-top:1px solid rgba(255,255,255,.08)}
+
 
 .analysis-header{
     margin-bottom:8px;
@@ -419,7 +635,7 @@
 .analysis-header h3{
     margin:0;
     color:#ffffff;
-    font-size:15px;
+    font-size:20px;
     font-weight:600;
 }
 
@@ -427,6 +643,226 @@
     color:#94A3B8;
     font-size:13px;
 }
+
+/* ================================
+   CHATBOT WELCOME SCREEN
+   ================================ */
+
+.chat-welcome {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    padding: 30px 20px;
+    box-sizing: border-box;
+}
+
+.welcome-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 16px;
+
+    border-radius: 50%;
+
+    background: rgba(37, 99, 235, 0.12);
+    color: #38bdf8;
+
+    border: 1px solid rgba(56, 189, 248, 0.18);
+}
+
+.welcome-icon svg {
+    width: 25px;
+    height: 25px;
+}
+/* Remove icon from FinSight welcome screen */
+.chat-welcome .welcome-icon {
+    display: none !important;
+}
+
+.chat-welcome h1 {
+    margin: 0;
+
+    color: #f8fafc;
+
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.chat-welcome p {
+    margin: 8px 0 4px;
+
+    color: #cbd5e1;
+
+    font-size: 16px;
+}
+
+.welcome-subtitle {
+    color: #64748b;
+
+    font-size: 13px;
+
+    max-width: 600px;
+}
+/* ================================
+   CHAT SUGGESTION BUTTONS
+   ================================ */
+
+.suggestion-chips {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    margin-top: 24px;
+
+    max-width: 650px;
+}
+
+.suggestion-chips button {
+    padding: 9px 14px;
+
+    background: rgba(15, 23, 42, 0.75);
+
+    color: #cbd5e1;
+
+    border: 1px solid rgba(96, 165, 250, 0.20);
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.suggestion-chips button:hover {
+    background: rgba(37, 99, 235, 0.14);
+
+    border-color: rgba(56, 189, 248, 0.45);
+
+    color: #f8fafc;
+
+    transform: translateY(-1px);
+}
+    /* ===== ATTACH BUTTON ===== */
+
+    .chat-area .file-input-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+
+        padding: 8px 12px;
+
+        background: #1e293b;
+
+        color: #94a3b8;
+
+        border: 1px solid rgba(96, 165, 250, 0.15);
+
+        border-radius: 8px;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+    .chat-area .file-input-label:hover {
+        background: #243247;
+        border-color: rgba(56, 189, 248, 0.4);
+        color: #f8fafc;
+    }
+    /* ===== SEND BUTTON ===== */
+
+    .chat-area .btn-send {
+        width: 36px;
+        height: 36px;
+
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: none;
+        border-radius: 50%;
+
+        background: linear-gradient(
+            135deg,
+            #2563eb,
+            #06b6d4
+        );
+
+        color: white;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+    .chat-area .btn-send:hover {
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 0 14px rgba(56, 189, 248, 0.35);
+    }
+
+    .chat-area .btn-send:active {
+        transform: scale(0.96);
+    }
+    /* ===== NEW CHAT BUTTON ===== */
+
+    .new-chat-btn {
+        height: 40px;
+        padding: 0 14px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        background: rgba(15, 23, 42, 0.75);
+
+        color: #cbd5e1;
+
+        border: 1px solid rgba(96, 165, 250, 0.25);
+
+        border-radius: 9px;
+
+        font-size: 14px;
+        font-weight: 500;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+    .new-chat-btn:hover {
+        background: rgba(37, 99, 235, 0.15);
+
+        border-color: rgba(56, 189, 248, 0.5);
+
+        color: #f8fafc;
+    }
+
+    .new-chat-btn svg {
+        width: 16px;
+        height: 16px;
+    }
 @media (max-width:768px){
     body {
         overflow: hidden;
@@ -439,11 +875,28 @@
     
     .header-right {
         position: absolute;
-        right: 0.5rem;
+        right: 0.3rem;
         top: 50%;
         transform: translateY(-50%);
     }
 
+    .stock-search {
+        display: grid;
+        grid-template-columns: 40fr 60fr;
+        gap: 8px;
+    }
+
+    .stock-search-box {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .stock-search select,
+    .stock-search button {
+        width: 100%;
+        height: 40px;
+        box-sizing: border-box;
+    }
     .container {
         flex-direction: column;
         padding: 0;
@@ -479,7 +932,7 @@
 
     .input-controls {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 0.2rem;
         width: 100%;
         box-sizing: border-box;
@@ -599,19 +1052,51 @@
         white-space: pre;
     }   
     /* Make indicator cards smaller on mobile */
-    .indicators{
-        gap: 6px;
+    .indicators {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
     }
 
-    .indicator-card{
-        padding: 6px;
-        border-radius: 8px;
+    .indicator-card {
+        min-height: 44px;
+        padding: 8px 10px;
+        border-radius: 9px;
+        gap: 5px;
+    }
 
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 6px;      /* increase spacing between label/value/status */
-        min-height: 42px;   /* Increase height */
+    .indicator-card .label {
+        font-size: 12px;
+    }
+
+    .indicator-card .value {
+        font-size: 12px;
+    }
+
+    .indicator-card .status {
+        font-size: 11px;
+    }
+
+    .metric-icon {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+    }
+
+    .metric-icon svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .metric-name {
+        font-size: 12px;
+    }
+
+    .metric-value {
+        font-size: 15px;
+    }
+
+    .indicator-card .status {
+        font-size: 10px;
     }
 
     /* Labels */
@@ -631,6 +1116,102 @@
         font-size: 0.65rem;
         line-height: 1.1;
     }
+    /* ===== CHATBOT MOBILE ===== */
+
+    .chat-welcome {
+        padding: 20px 12px;
+    }
+
+    .welcome-icon {
+        width: 44px;
+        height: 44px;
+    }
+
+    .welcome-icon svg {
+        width: 21px;
+        height: 21px;
+    }
+
+    .chat-welcome h1 {
+        font-size: 21px;
+    }
+
+    .chat-welcome p {
+        font-size: 14px;
+    }
+
+    .welcome-subtitle {
+        font-size: 11px;
+        max-width: 280px;
+    }
+
+    .suggestion-chips {
+        width: 100%;
+        max-width: 320px;
+
+        flex-direction: column;
+
+        gap: 7px;
+    }
+
+    .suggestion-chips button {
+        width: 100%;
+    }
+
+    .new-chat-btn {
+        width: 38px;
+        height: 38px;
+        padding: 0;
+    }
+
+    .new-chat-btn span {
+        display: none;
+    }
+    .new-chat-btn {
+    margin-left: 30px !important;
+}
+}
+/* Chat input alignment */
+.chat-area .input-controls {
+    align-items: stretch !important;
+}
+
+.chat-area .file-input-wrapper {
+    display: flex;
+}
+
+.chat-area .file-input-label {
+    height: 100%;
+    margin: 0 !important;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* ===== FIN SIGHT GLOBAL BACKGROUND ===== */
+
+html,
+body {
+    min-height: 100%;
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(37, 99, 235, 0.12),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(6, 182, 212, 0.08),
+            transparent 35%
+        ),
+        #080d1b;
+}
+
+/* Main application area */
+body {
+    min-height: 100vh;
+    background-attachment: fixed;
 }
 </style>
 </head>
@@ -642,11 +1223,17 @@
         </div>
         <!-- ← NEW: Toggle button for Stock Intelligence -->
     <div class="header-right">
+    <button class="new-chat-btn"
+            onclick="startNewChat()"
+            title="Start a new chat">
+
+        <i data-lucide="plus"></i>
+        <span>New Chat</span>
+    </button>
     <button class="toggle-intelligence-btn" onclick="toggleStockIntelligence()" title="Toggle Stock Intelligence">
         <i data-lucide="bar-chart-3" style="width: 20px; height: 20px;"></i>
         <span>Stock Metrics</span>
     </button>
-        
     </div>
     </div>
 
@@ -655,15 +1242,17 @@
   <div class="chart-sidebar hidden" id="chartSidebar">
     <!-- Stock Intelligence Header -->
     <div class="analysis-header">
-        <h3>Stock Metrics</h3>
+        <div class="stock-metrics-header">
+            <i data-lucide="trending-up"></i>
+            <span>Stock Metrics</span>
+        </div>
     </div>
     <div class="stock-search">
 
-    <input
-        type="text"
-        id="chartStockTicker"
-        placeholder="Search by stock name or Stock symbol/ticker"
-    >
+    <div class="stock-search-box">
+    <input type="text" id="chartStockTicker" placeholder="Search by stock name or Stock symbol/ticker" onkeyup="showStockSuggestions(event)">
+    <div id="stockSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #1f2937; border: 1px solid rgba(56,189,248,0.2); border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 100; display: none;"></div>
+    </div>
 
     <select id="chartPeriod">
 
@@ -685,29 +1274,165 @@
     <div class="chart-container">
       <div id="candlestickChart" style="height: 250px;"></div>
     </div>
+
 <div class="indicators">
-  <div class="indicator-card"><span class="label">RSI</span><span class="value" id="rsiValue">--</span><span class="status" id="rsiStatus">--</span></div>
-  <div class="indicator-card"><span class="label">Current Price</span><span class="value" id="priceValue">--</span></div>
-  <div class="indicator-card"><span class="label">MACD</span><span class="value" id="macdValue">--</span></div>
-  <div class="indicator-card"><span class="label">50 EMA</span><span class="value" id="ema50Value">--</span></div>
-  <div class="indicator-card"><span class="label">200 EMA</span><span class="value" id="ema200Value">--</span></div>
-  <div class="indicator-card"><span class="label">P/E Ratio</span><span class="value" id="peRatioValue">--</span></div>
-  </div>
+  <div class="indicator-card">
+    <div class="metric-icon">
+        <i data-lucide="activity"></i>
+    </div>
+
+    <div class="metric-content">
+        <div class="metric-name">
+            RSI
+            <i class="info-icon"
+               onclick="showMetricInfo('RSI')"
+               data-lucide="info"
+               style="width: 14px; height: 14px; cursor: pointer;"></i>
+        </div>
+
+        <div class="metric-value" id="rsiValue">--</div>
+    </div>
+
+    <span class="status" id="rsiStatus">--</span>
+</div>
+  <div class="indicator-card">
+    <div class="metric-icon price-icon">
+        <i data-lucide="indian-rupee"></i>
+    </div>
+
+    <div class="metric-content">
+        <div class="metric-name">
+            Current Price
+            <i class="info-icon"
+               onclick="showMetricInfo('Price')"
+               data-lucide="info"
+               style="width: 14px; height: 14px; cursor: pointer;"></i>
+        </div>
+
+        <div class="metric-value" id="priceValue">--</div>
+    </div>
+</div>
+  
+  <div class="indicator-card">
+    <div class="metric-icon macd-icon">
+        <i data-lucide="bar-chart-3"></i>
+    </div>
+
+    <div class="metric-content">
+        <div class="metric-name">
+            MACD
+            <i class="info-icon"
+               onclick="showMetricInfo('MACD')"
+               data-lucide="info"
+               style="width: 14px; height: 14px; cursor: pointer;"></i>
+        </div>
+
+        <div class="metric-value" id="macdValue">--</div>
+    </div>
+</div>
+  <div class="indicator-card">
+    <div class="metric-icon ema50-icon">
+        <i data-lucide="trending-up"></i>
+    </div>
+
+    <div class="metric-content">
+        <div class="metric-name">
+            50 EMA
+            <i class="info-icon"
+               onclick="showMetricInfo('EMA50')"
+               data-lucide="info"
+               style="width: 14px; height: 14px; cursor: pointer;"></i>
+        </div>
+
+        <div class="metric-value" id="ema50Value">--</div>
+    </div>
+</div>
+  
+  <div class="indicator-card">
+    <div class="metric-icon ema200-icon">
+        <i data-lucide="trending-up"></i>
+    </div>
+
+    <div class="metric-content">
+        <div class="metric-name">
+            200 EMA
+            <i class="info-icon"
+               onclick="showMetricInfo('EMA200')"
+               data-lucide="info"
+               style="width: 14px; height: 14px; cursor: pointer;"></i>
+        </div>
+
+        <div class="metric-value" id="ema200Value">--</div>
+    </div>
+</div>
+  <div class="indicator-card">
+    <div class="metric-icon pe-icon">
+        <i data-lucide="pie-chart"></i>
+    </div>
+
+    <div class="metric-content">
+        <div class="metric-name">
+            P/E Ratio
+            <i class="info-icon"
+               onclick="showMetricInfo('PE')"
+               data-lucide="info"
+               style="width: 14px; height: 14px; cursor: pointer;"></i>
+        </div>
+
+        <div class="metric-value" id="peRatioValue">--</div>
+    </div>
+</div>
+</div>
+<!-- Modal for metric info -->
+<div id="metricModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: #111827; border: 1px solid rgba(56,189,248,0.3); border-radius: 12px; padding: 2rem; max-width: 400px; color: #9ca3af;">
+        <h3 id="metricTitle" style="color: #38bdf8; margin-bottom: 1rem;"></h3>
+        <p id="metricDescription" style="line-height: 1.6; margin-bottom: 1rem;"></p>
+        <button onclick="closeMetricInfo()" style="background: #38bdf8; color: #0a0f1d; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Close</button>
+    </div>
+</div>
+
 </div>
   <div class="chat-section">
 <div class="chat-area">
             <div class="chat-messages" id="chatMessages">
-                <div class="message agent">
-                    <div class="agent-icon-wrapper">
-                        <i data-lucide="trending-up" style="width: 18px; height: 18px;"></i>
+
+                <div class="chat-welcome" id="chatWelcome">
+
+                    <div class="welcome-icon">
+                        <i data-lucide="trending-up"></i>
                     </div>
-                    <div class="message-content-wrapper">
-                        <div class="message-content">
-                            Hello! I'm your stock market assistant. Ask me about stock prices, market trends & news, funds comparisons, or documents analysis.
-                        </div>
-                        <div class="message-time">09:41</div>
+
+                    <h1>Welcome to FinSight</h1>
+
+                    <p>Your AI financial market assistant</p>
+
+                    <span class="welcome-subtitle">
+                        Ask about stocks, markets, funds or financial documents
+                    </span>
+
+                    <div class="suggestion-chips">
+
+                        <button onclick="setChatPrompt('Analyze a stock')">
+                            Analyze a stock
+                        </button>
+
+                        <button onclick="setChatPrompt('What are the latest market trends?')">
+                            Market trends
+                        </button>
+
+                        <button onclick="setChatPrompt('Compare mutual funds')">
+                            Compare funds
+                        </button>
+
+                        <button onclick="setChatPrompt('Help me analyze a document')">
+                            Analyze document
+                        </button>
+
                     </div>
+
                 </div>
+
             </div>
 
             <div class="input-area">
@@ -724,10 +1449,10 @@
 
                     <!-- Text input container -->
                     <div class="input-container">
-                        <div class="input-icon">
-                            <i data-lucide="bot" style="width: 18px; height: 18px;"></i>
-                        </div>
-                        <input type="text" id="userInput" placeholder="Ask anything" onkeypress="handleEnter(event)">
+                        <!--<div class="input-icon">
+                            <i data-lucide="bot" style="width: 18px; height: 28px;"></i>
+                        </div> -->
+                        <textarea id="userInput" placeholder="Ask anything" onkeypress="handleEnter(event)" style="resize: none; max-height: 100px; overflow-y: auto;"></textarea>
                         <button class="btn-send" onclick="sendMessage()">
                             <i data-lucide="send-horizontal" style="width: 16px; height: 16px;"></i>
                         </button>
@@ -748,6 +1473,112 @@
         const API_BASE = window.location.origin;
         let sessionId = `session_${Date.now()}`;
         let selectedFile = null;
+     //   formData.append("session_id", sessionId);
+        async function startNewChat() {
+
+            console.log("New Chat clicked");
+
+            const oldSessionId = sessionId;
+
+            try {
+                // Delete the current conversation from backend
+                const response = await fetch(
+                    `${API_BASE}/chat/${encodeURIComponent(oldSessionId)}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                if (!response.ok) {
+                    console.error("Failed to delete old chat:", response.status);
+                } else {
+                    console.log("Old chat deleted");
+                }
+
+            } catch (error) {
+                console.error("Error deleting old chat:", error);
+            }
+
+            // Create completely new session
+            sessionId = `session_${Date.now()}`;
+
+            console.log("New session:", sessionId);
+
+            // Clear chat messages
+            const chatMessages = document.getElementById("chatMessages");
+
+            if (chatMessages) {
+                chatMessages.innerHTML = `
+                    <div class="chat-welcome" id="chatWelcome">
+
+                        
+
+                        <h1>Welcome to FinSight</h1>
+
+                        <p>Your AI financial market assistant</p>
+
+                        <span class="welcome-subtitle">
+                            Ask about stocks, markets, funds or financial documents
+                        </span>
+
+                        <div class="suggestion-chips">
+
+                            <button onclick="setChatPrompt('Analyze ICICIBANK')">
+                                Analyze a stock
+                            </button>
+
+                            <button onclick="setChatPrompt('What are the latest market trends?')">
+                                Market trends
+                            </button>
+
+                            <button onclick="setChatPrompt('Compare mutual funds')">
+                                Compare funds
+                            </button>
+
+                            <button onclick="setChatPrompt('Help me analyze a document')">
+                                Analyze document
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+            }
+
+            // Clear input
+            const input = document.getElementById("userInput");
+
+            if (input) {
+                input.value = "";
+            }
+
+            // Clear selected file
+            selectedFile = null;
+
+            const fileInput = document.getElementById("docUpload");
+
+            if (fileInput) {
+                fileInput.value = "";
+            }
+
+            const fileStatus = document.getElementById("fileStatus");
+
+            if (fileStatus) {
+                fileStatus.innerHTML = "";
+            }
+
+            // Re-render Lucide icons
+            if (typeof lucide !== "undefined") {
+                lucide.createIcons();
+            }
+        }
+        function hideWelcome() {
+            const welcome = document.querySelector(".chat-welcome");
+
+            if (welcome) {
+                welcome.style.display = "none";
+            }
+        }
         // ← NEW FUNCTION
         function isMobileDevice() {
             return window.innerWidth <= 768 || /mobile|android|iphone/i.test(navigator.userAgent);
@@ -760,6 +1591,79 @@
             //loadIntelligenceState();  // ← ADD THIS LINE
             });
 
+        const stockMappings = {
+            
+            'ICICIBANK': 'ICICIBANK',
+            'AXISBANK': 'AXISBANK',
+            'TCS': 'TCS',
+            'INFOSYS': 'INFOSYS',
+            'INFY': 'INFOSYS',
+            'RELIANCE': 'RELIANCE',
+            'RIL': 'RELIANCE',
+            'HDFC': 'HDFCBANK',
+            'ICICI': 'ICICIBANK',
+            'AXIS': 'AXISBANK',
+            'ITC': 'ITC',
+            'MARUTI': 'MARUTI',
+            'BAJAJFINSV': 'BAJAJFINSV',
+            'JSWSTEEL': 'JSWSTEEL',
+            'NTPC': 'NTPC',
+            'SBIN': 'SBI',
+            'BEL': 'Bharat Electronics',
+            'BAJFINANCE': 'Bajaj Finance',
+            'LT': 'Larsen & Toubro',
+            'HCLTECH': 'HCL Technologies',
+            'WIPRO': 'WIPRO',
+            'ADANIPOWER': 'ADANIPOWER'
+        };
+
+        // Get all unique stock names for suggestions
+        const allStocks = Object.keys(stockMappings);
+
+        function setChatPrompt(prompt) {
+            const input = document.getElementById("userInput");
+
+            if (input) {
+                input.value = prompt;
+                input.focus();
+            }
+        }
+        function showStockSuggestions(event) {
+            const input = event.target.value.toUpperCase();
+            const suggestionsDiv = document.getElementById('stockSuggestions');
+            
+            if (input.length < 1) {
+                suggestionsDiv.style.display = 'none';
+                return;
+            }
+            
+            // Filter by both keys and values
+            const filtered = allStocks.filter(stock => 
+                stock.includes(input) || stockMappings[stock].toUpperCase().includes(input)
+            );
+            
+            if (filtered.length === 0) {
+                suggestionsDiv.style.display = 'none';
+                return;
+            }
+            
+            suggestionsDiv.innerHTML = filtered.map(stock => `
+                <div style="padding: 0.5rem 1rem; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); color: #9ca3af;" 
+                    onmouseover="this.style.backgroundColor='rgba(56,189,248,0.1)'; this.style.color='#38bdf8';" 
+                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='#9ca3af';"
+                    onclick="selectStock('${stock}')">
+                    ${stock} ${stock !== stockMappings[stock] ? `(${stockMappings[stock]})` : ''}
+                </div>
+            `).join('');
+            
+            suggestionsDiv.style.display = 'block';
+        }
+
+        function selectStock(stock) {
+            document.getElementById('chartStockTicker').value = stock;
+            document.getElementById('stockSuggestions').style.display = 'none';
+            loadChartData();
+        }
         // Update file selection display
         function updateFileSelection() {
             const fileInput = document.getElementById("docUpload");
@@ -776,8 +1680,20 @@
 
         function handleEnter(event) {
             if (event.key === "Enter") {
-                event.preventDefault();
-                sendMessage();
+                if (event.shiftKey) {
+                    // Shift+Enter: Allow line break
+                    event.preventDefault();
+                    const input = document.getElementById("userInput");
+                    const start = input.selectionStart;
+                    const end = input.selectionEnd;
+                    const text = input.value;
+                    input.value = text.substring(0, start) + "\n" + text.substring(end);
+                    input.selectionStart = input.selectionEnd = start + 1;
+                } else {
+                    // Enter only: Send message
+                    event.preventDefault();
+                    sendMessage();
+                }
             }
         }
 
@@ -785,8 +1701,45 @@
             const now = new Date();
             return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
         }
+//NEW - 11 Aug
+        const metricExplanations = {
+            'RSI': {
+                title: 'RSI (Relative Strength Index)',
+                description: 'Measures momentum on a scale of 0-100. RSI > 70 = Overbought (may fall). RSI < 30 = Oversold (may rise). Helps identify turning points.'
+            },
+            'Price': {
+                title: 'Current Price',
+                description: 'The live price of one share of this stock. Helps you understand the cost of buying one unit.'
+            },
+            'MACD': {
+                title: 'MACD (Moving Average Convergence Divergence)',
+                description: 'Measures trend and momentum. When MACD line > Signal line = Bullish. When MACD line < Signal line = Bearish. Shows buy/sell signals.'
+            },
+            'EMA50': {
+                title: '50-Day EMA (Exponential Moving Average)',
+                description: 'Average price over 50 days, weighted toward recent prices. Shows short-term trend. Price > EMA50 = Uptrend. Price < EMA50 = Downtrend.'
+            },
+            'EMA200': {
+                title: '200-Day EMA',
+                description: 'Average price over 200 days. Shows long-term trend. When EMA50 > EMA200 = Bullish. When EMA50 < EMA200 = Bearish.'
+            },
+            'PE': {
+                title: 'P/E Ratio (Price-to-Earnings)',
+                description: 'Price per rupee of company earnings. PE < 15 = Cheap. PE 15-25 = Fair. PE > 25 = Expensive. Lower PE = Better value, but check growth too.'
+            }
+        };
 
-        async function sendMessage() {
+        function showMetricInfo(metric) {
+            const info = metricExplanations[metric];
+            document.getElementById('metricTitle').textContent = info.title;
+            document.getElementById('metricDescription').textContent = info.description;
+            document.getElementById('metricModal').style.display = 'flex';
+        }
+
+        function closeMetricInfo() {
+            document.getElementById('metricModal').style.display = 'none';
+        }
+        async function sendMessage() {hideWelcome();
     const input = document.getElementById("userInput");
     const message = input.value.trim();
     const loadedStock = document.getElementById("chartStockTicker").value;  // ← ADD THIS
@@ -873,7 +1826,7 @@
 
             chatMessages.appendChild(messageDiv);
             lucide.createIcons();
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+           // chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
         // ← NEW: Send feedback to backend
@@ -1001,7 +1954,7 @@
                 </div>`;
             chatMessages.appendChild(loadingDiv);
             lucide.createIcons();
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+           // chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
 function removeLoading() {
@@ -1047,7 +2000,6 @@ async function loadChartData() {
         'BHARTIARTL': 'Airtel',
         'BAJFINANCE': 'Bajaj Finance',
         'LT': 'Larsen & Toubro',
-        'ADANIENT': 'Adani Enterprises',
         'M&M': 'Mahindra & Mahindra',
         'HCLTECH': 'HCL Technologies'
     };
