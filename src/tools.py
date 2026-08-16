@@ -1231,6 +1231,57 @@ def get_fund_holdings(fund_name: str) -> dict:
         "error": f"Holdings not available for '{fund_name}'",
         "suggestion": "Please upload the fund factsheet PDF for holdings data"
     },
+
+# ─────────────────────────────────────────
+# Tool 13: Stock fundamentals
+# ─────────────────────────────────────────
+def get_stock_fundamentals(ticker: str):
+    """
+    Get key fundamental and financial-health metrics for an Indian stock.
+    """
+    try:
+        import yfinance as yf
+
+        if not ticker.endswith(".NS"):
+            ticker = ticker + ".NS"
+
+        stock = yf.Ticker(ticker)
+        info = stock.info
+
+        return {
+            "ticker": ticker,
+            "company": info.get("longName"),
+
+            # Valuation
+            "pe_ratio": info.get("trailingPE"),
+            "pb_ratio": info.get("priceToBook"),
+            "dividend_yield": info.get("dividendYield"),
+
+            # Profitability
+            "roe": info.get("returnOnEquity"),
+            "roa": info.get("returnOnAssets"),
+            "profit_margin": info.get("profitMargins"),
+            "operating_margin": info.get("operatingMargins"),
+
+            # Financial health
+            "debt_to_equity": info.get("debtToEquity"),
+            "current_ratio": info.get("currentRatio"),
+            "quick_ratio": info.get("quickRatio"),
+
+            # Debt / balance sheet
+            "total_debt": info.get("totalDebt"),
+            "total_cash": info.get("totalCash"),
+
+            # Growth
+            "revenue_growth": info.get("revenueGrowth"),
+            "earnings_growth": info.get("earningsGrowth"),
+        }
+
+    except Exception as e:
+        return {
+            "error": str(e),
+            "ticker": ticker
+        },
 # ─────────────────────────────────────────
 # Tool 11: New document analysis
 # ─────────────────────────────────────────
@@ -1378,3 +1429,4 @@ def analyze_investment_worthiness(ticker: str, fund_name: str = None) -> dict:
             }
     except Exception as e:
         return {"error": str(e)}
+
