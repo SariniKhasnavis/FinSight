@@ -532,145 +532,692 @@ def get_fund_holdings(fund_name: str) -> dict:
     """
     holdings_map = {
 
-        # ── 1. PARAG PARIKH FLEXI CAP ──
-        "parag parikh flexi cap": {
-            "fund_name": "Parag Parikh Flexi Cap Fund",
-            "category": "Flexi Cap",
-            "holdings": [
-                {"stock": "HDFC Bank", "percentage": 7.94},
-                {"stock": "Bajaj Holdings", "percentage": 4.41},
-                {"stock": "Coal India", "percentage": 5.95},
-                {"stock": "Power Grid", "percentage": 6.99},
-                {"stock": "ITC", "percentage": 5.43},
-                {"stock": "Alphabet (Google)", "percentage": 4.92},
-            ]
-        },
-
-        # ── 2. HDFC FLEXI CAP ──
-        "hdfc flexi cap": {
-            "fund_name": "HDFC Flexi Cap Fund",
-            "category": "Flexi Cap",
-            "holdings": [
-                {"stock": "ICICI Bank", "percentage": 8.69},
-                {"stock": "HDFC Bank", "percentage": 6.81},
-                {"stock": "Reliance Industries", "percentage": 5.25},
-                {"stock": "Infosys", "percentage": 4.90},
-                {"stock": "Axis Bank", "percentage": 6.83},
-                {"stock": "Larsen & Toubro", "percentage": 4.10},
-            ]
-        },
-
-        # ── 3. SBI BLUECHIP ──
-        "sbi bluechip": {
-            "fund_name": "SBI Bluechip Fund",
-            "category": "Large Cap",
-            "holdings": [
-                {"stock": "HDFC Bank", "percentage": 8.73},
-                {"stock": "ICICI Bank", "percentage": 7.76},
-                {"stock": "Reliance Industries", "percentage": 6.56},
-                {"stock": "Infosys", "percentage": 3.94},
-                {"stock": "Larsen & Toubro", "percentage": 5.56},
-                {"stock": "Axis Bank", "percentage": 3.26},
-            ]
-        },
-
-        # ── 4. MIRAE ASSET LARGE CAP ──
-        "mirae asset large cap": {
-            "fund_name": "Mirae Asset Large Cap Fund",
-            "category": "Large Cap",
-            "holdings": [
-                {"stock": "HDFC Bank", "percentage": 9.12},
-                {"stock": "ICICI Bank", "percentage": 7.95},
-                {"stock": "Reliance Industries", "percentage": 6.84},
-                {"stock": "Infosys", "percentage": 5.11},
-                {"stock": "TCS", "percentage": 4.05},
-                {"stock": "Axis Bank", "percentage": 3.42},
-            ]
-        },
-
-        # ── 5. HDFC MIDCAP OPPORTUNITIES ──
-        "hdfc midcap opportunities": {
-            "fund_name": "HDFC Midcap Opportunities Fund",
-            "category": "Mid Cap",
-            "holdings": [
-                {"stock": "Cholamandalam Investment", "percentage": 4.15},
-                {"stock": "Persistent Systems", "percentage": 3.80},
-                {"stock": "Supreme Industries", "percentage": 3.45},
-                {"stock": "Crompton Greaves Consumer", "percentage": 2.90},
-                {"stock": "Tube Investments", "percentage": 2.85},
-                {"stock": "Sundaram Finance", "percentage": 2.70},
-            ]
-        },
-
-        # ── 6. AXIS MIDCAP ──
-        "axis midcap": {
-            "fund_name": "Axis Midcap Fund",
-            "category": "Mid Cap",
-            "holdings": [
-                {"stock": "Cholamandalam Investment", "percentage": 4.60},
-                {"stock": "Persistent Systems", "percentage": 3.95},
-                {"stock": "Page Industries", "percentage": 3.50},
-                {"stock": "Astral", "percentage": 3.10},
-                {"stock": "Tube Investments", "percentage": 2.95},
-                {"stock": "Divi's Laboratories", "percentage": 2.80},
-            ]
-        },
-
-        # ── 7. SBI SMALL CAP ──
-        "sbi small cap": {
-            "fund_name": "SBI Small Cap Fund",
-            "category": "Small Cap",
-            "holdings": [
-                {"stock": "Finolex Cables", "percentage": 4.20},
-                {"stock": "Blue Star", "percentage": 3.90},
-                {"stock": "Hawkins Cookers", "percentage": 3.65},
-                {"stock": "Elgi Equipments", "percentage": 3.40},
-                {"stock": "Garware Technical Fibres", "percentage": 3.15},
-                {"stock": "Suprajit Engineering", "percentage": 2.95},
-            ]
-        },
-
-        # ── 8. NIPPON INDIA SMALL CAP ──
-        "nippon india small cap": {
-            "fund_name": "Nippon India Small Cap Fund",
-            "category": "Small Cap",
-            "holdings": [
-                {"stock": "KPIT Technologies", "percentage": 1.18},
-                {"stock": "Tube Investments", "percentage": 1.01},
-                {"stock": "Persistent Systems", "percentage": 1.12},
-                {"stock": "Bharat Dynamics", "percentage": 0.31},
-                {"stock": "Elgi Equipments", "percentage": 0.85},
-                {"stock": "Blue Star", "percentage": 0.49},
-            ]
-        },
-
-        # ── 9. MIRAE ASSET TAX SAVER ──
-        "mirae asset tax saver": {
-            "fund_name": "Mirae Asset Tax Saver Fund",
-            "category": "ELSS",
-            "holdings": [
-                {"stock": "HDFC Bank", "percentage": 8.95},
-                {"stock": "ICICI Bank", "percentage": 7.40},
-                {"stock": "Reliance Industries", "percentage": 6.35},
-                {"stock": "Infosys", "percentage": 4.85},
-                {"stock": "TCS", "percentage": 3.90},
-                {"stock": "Axis Bank", "percentage": 3.25},
-            ]
-        },
-
-        # ── 10. UTI NIFTY 50 INDEX ──
-        "uti nifty 50 index": {
-            "fund_name": "UTI Nifty 50 Index Fund",
-            "category": "Index Fund",
-            "holdings": [
-                {"stock": "HDFC Bank", "percentage": 11.45},
-                {"stock": "Reliance Industries", "percentage": 9.60},
-                {"stock": "ICICI Bank", "percentage": 7.85},
-                {"stock": "Infosys", "percentage": 5.05},
-                {"stock": "TCS", "percentage": 3.80},
-                {"stock": "Larsen & Toubro", "percentage": 3.55},  # ← update
-            ]
-        },
+       # ==========================================
+    # ── 1. ORIGINAL 10 UPDATED FUNDS ──
+    # ==========================================
+    "parag parikh flexi cap": {
+        "fund_name": "Parag Parikh Flexi Cap Fund",
+        "category": "Flexi Cap",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 8.12},
+            {"stock": "Power Grid Corporation", "percentage": 6.85},
+            {"stock": "Bajaj Holdings & Investment", "percentage": 6.40},
+            {"stock": "ITC", "percentage": 5.90},
+            {"stock": "Coal India", "percentage": 5.25},
+            {"stock": "Alphabet Inc (Google)", "percentage": 4.80},
+            {"stock": "Maruti Suzuki India", "percentage": 4.35},
+        ],
+    },
+    "hdfc flexi cap": {
+        "fund_name": "HDFC Flexi Cap Fund",
+        "category": "Flexi Cap",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 8.69},
+            {"stock": "Axis Bank", "percentage": 6.83},
+            {"stock": "HDFC Bank", "percentage": 6.81},
+            {"stock": "State Bank of India", "percentage": 4.74},
+            {"stock": "Larsen & Toubro", "percentage": 3.35},
+            {"stock": "Bharti Airtel", "percentage": 3.10},
+            {"stock": "Reliance Industries", "percentage": 2.19},
+        ],
+    },
+    "sbi bluechip": {
+        "fund_name": "SBI Bluechip Fund",
+        "category": "Large Cap",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 8.65},
+            {"stock": "ICICI Bank", "percentage": 7.80},
+            {"stock": "Reliance Industries", "percentage": 6.40},
+            {"stock": "Larsen & Toubro", "percentage": 5.45},
+            {"stock": "ITC", "percentage": 4.10},
+            {"stock": "Infosys", "percentage": 3.85},
+            {"stock": "Axis Bank", "percentage": 3.30},
+        ],
+    },
+    "mirae asset large cap": {
+        "fund_name": "Mirae Asset Large Cap Fund",
+        "category": "Large Cap",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 9.25},
+            {"stock": "ICICI Bank", "percentage": 8.10},
+            {"stock": "Reliance Industries", "percentage": 6.70},
+            {"stock": "Infosys", "percentage": 5.05},
+            {"stock": "TCS", "percentage": 3.95},
+            {"stock": "Larsen & Toubro", "percentage": 3.60},
+            {"stock": "Axis Bank", "percentage": 3.35},
+        ],
+    },
+    "hdfc midcap opportunities": {
+        "fund_name": "HDFC Midcap Opportunities Fund",
+        "category": "Mid Cap",
+        "holdings": [
+            {"stock": "Cholamandalam Investment", "percentage": 4.25},
+            {"stock": "Max Healthcare Institute", "percentage": 3.90},
+            {"stock": "Persistent Systems", "percentage": 3.75},
+            {"stock": "Supreme Industries", "percentage": 3.35},
+            {"stock": "Indian Hotels Company", "percentage": 3.10},
+            {"stock": "Crompton Greaves Consumer", "percentage": 2.85},
+            {"stock": "Tube Investments of India", "percentage": 2.75},
+        ],
+    },
+    "axis midcap": {
+        "fund_name": "Axis Midcap Fund",
+        "category": "Mid Cap",
+        "holdings": [
+            {"stock": "Cholamandalam Investment", "percentage": 4.55},
+            {"stock": "Persistent Systems", "percentage": 3.85},
+            {"stock": "Trent", "percentage": 3.60},
+            {"stock": "Page Industries", "percentage": 3.40},
+            {"stock": "Astral", "percentage": 3.05},
+            {"stock": "Tube Investments of India", "percentage": 2.90},
+            {"stock": "Divi's Laboratories", "percentage": 2.75},
+        ],
+    },
+    "sbi small cap": {
+        "fund_name": "SBI Small Cap Fund",
+        "category": "Small Cap",
+        "holdings": [
+            {"stock": "Finolex Cables", "percentage": 4.10},
+            {"stock": "Blue Star", "percentage": 3.85},
+            {"stock": "Hawkins Cookers", "percentage": 3.55},
+            {"stock": "Kalpataru Projects", "percentage": 3.45},
+            {"stock": "Elgi Equipments", "percentage": 3.30},
+            {"stock": "Garware Technical Fibres", "percentage": 3.10},
+            {"stock": "Suprajit Engineering", "percentage": 2.90},
+        ],
+    },
+    "nippon india small cap": {
+        "fund_name": "Nippon India Small Cap Fund",
+        "category": "Small Cap",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 1.89},
+            {"stock": "Bharat Heavy Electricals", "percentage": 1.67},
+            {"stock": "TD Power Systems", "percentage": 1.54},
+            {"stock": "Apar Industries", "percentage": 1.49},
+            {"stock": "Karur Vysya Bank", "percentage": 1.29},
+            {"stock": "State Bank of India", "percentage": 1.18},
+            {"stock": "Tube Investments of India", "percentage": 1.01},
+        ],
+    },
+    "mirae asset tax saver": {
+        "fund_name": "Mirae Asset ELSS Tax Saver Fund",
+        "category": "ELSS",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 8.85},
+            {"stock": "ICICI Bank", "percentage": 7.35},
+            {"stock": "Reliance Industries", "percentage": 6.25},
+            {"stock": "Infosys", "percentage": 4.75},
+            {"stock": "TCS", "percentage": 3.85},
+            {"stock": "Larsen & Toubro", "percentage": 3.40},
+            {"stock": "Axis Bank", "percentage": 3.20},
+        ],
+    },
+    "uti nifty 50 index": {
+        "fund_name": "UTI Nifty 50 Index Fund",
+        "category": "Index Fund",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 11.35},
+            {"stock": "Reliance Industries", "percentage": 9.45},
+            {"stock": "ICICI Bank", "percentage": 7.90},
+            {"stock": "Infosys", "percentage": 5.15},
+            {"stock": "TCS", "percentage": 3.75},
+            {"stock": "Larsen & Toubro", "percentage": 3.60},
+            {"stock": "ITC", "percentage": 3.45},
+        ],
+    },
+    # ==========================================
+    # ── 2. ADDITIONAL 50 KEY FUNDS ──
+    # ==========================================
+    # --- FLEXI CAP ---
+    "jm flexi cap": {
+        "fund_name": "JM Flexi Cap Fund",
+        "category": "Flexi Cap",
+        "holdings": [
+            {"stock": "Larsen & Toubro", "percentage": 5.40},
+            {"stock": "NTPC", "percentage": 4.80},
+            {"stock": "ICICI Bank", "percentage": 4.50},
+            {"stock": "REC Ltd", "percentage": 4.10},
+            {"stock": "State Bank of India", "percentage": 3.90},
+        ],
+    },
+    "kotak flexi cap": {
+        "fund_name": "Kotak Flexi Cap Fund",
+        "category": "Flexi Cap",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 7.20},
+            {"stock": "HDFC Bank", "percentage": 6.80},
+            {"stock": "Larsen & Toubro", "percentage": 5.10},
+            {"stock": "Infosys", "percentage": 4.30},
+            {"stock": "Reliance Industries", "percentage": 3.80},
+        ],
+    },
+    "motilal oswal flexi cap": {
+        "fund_name": "Motilal Oswal Flexi Cap Fund",
+        "category": "Flexi Cap",
+        "holdings": [
+            {"stock": "Jio Financial Services", "percentage": 8.50},
+            {"stock": "Zomato", "percentage": 6.40},
+            {"stock": "Trent", "percentage": 5.90},
+            {"stock": "Larsen & Toubro", "percentage": 5.10},
+            {"stock": "ICICI Bank", "percentage": 4.70},
+        ],
+    },
+    # --- LARGE CAP ---
+    "icici prudential bluechip": {
+        "fund_name": "ICICI Prudential Bluechip Fund",
+        "category": "Large Cap",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 9.10},
+            {"stock": "Reliance Industries", "percentage": 8.20},
+            {"stock": "HDFC Bank", "percentage": 7.80},
+            {"stock": "Larsen & Toubro", "percentage": 5.20},
+            {"stock": "Infosys", "percentage": 4.50},
+        ],
+    },
+    "nippon india large cap": {
+        "fund_name": "Nippon India Large Cap Fund",
+        "category": "Large Cap",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 9.30},
+            {"stock": "ICICI Bank", "percentage": 8.40},
+            {"stock": "ITC", "percentage": 5.60},
+            {"stock": "Reliance Industries", "percentage": 5.20},
+            {"stock": "State Bank of India", "percentage": 4.10},
+        ],
+    },
+    "canara robeco bluechip": {
+        "fund_name": "Canara Robeco Bluechip Equity Fund",
+        "category": "Large Cap",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 9.40},
+            {"stock": "ICICI Bank", "percentage": 8.50},
+            {"stock": "Infosys", "percentage": 5.20},
+            {"stock": "Reliance Industries", "percentage": 4.90},
+            {"stock": "Larsen & Toubro", "percentage": 3.80},
+        ],
+    },
+    # --- LARGE & MID CAP ---
+    "kotak equity opportunities": {
+        "fund_name": "Kotak Equity Opportunities Fund",
+        "category": "Large & Mid Cap",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 5.90},
+            {"stock": "HDFC Bank", "percentage": 5.20},
+            {"stock": "SRF", "percentage": 3.80},
+            {"stock": "Trent", "percentage": 3.40},
+            {"stock": "Larsen & Toubro", "percentage": 3.10},
+        ],
+    },
+    "mirae asset large & midcap": {
+        "fund_name": "Mirae Asset Large & Midcap Fund",
+        "category": "Large & Mid Cap",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 5.80},
+            {"stock": "ICICI Bank", "percentage": 5.10},
+            {"stock": "State Bank of India", "percentage": 3.50},
+            {"stock": "Axis Bank", "percentage": 3.20},
+            {"stock": "NTPC", "percentage": 2.80},
+        ],
+    },
+    "sbi large & midcap": {
+        "fund_name": "SBI Large & Midcap Fund",
+        "category": "Large & Mid Cap",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 4.90},
+            {"stock": "Reliance Industries", "percentage": 4.20},
+            {"stock": "Page Industries", "percentage": 3.10},
+            {"stock": "Infosys", "percentage": 2.90},
+            {"stock": "Trent", "percentage": 2.70},
+        ],
+    },
+    # --- MID CAP ---
+    "motilal oswal midcap": {
+        "fund_name": "Motilal Oswal Midcap Fund",
+        "category": "Mid Cap",
+        "holdings": [
+            {"stock": "Jio Financial Services", "percentage": 7.20},
+            {"stock": "Zomato", "percentage": 6.80},
+            {"stock": "Trent", "percentage": 5.40},
+            {"stock": "Coforge", "percentage": 4.90},
+            {"stock": "Persistent Systems", "percentage": 4.30},
+        ],
+    },
+    "nippon india growth": {
+        "fund_name": "Nippon India Growth Fund",
+        "category": "Mid Cap",
+        "holdings": [
+            {"stock": "Power Finance Corp", "percentage": 3.90},
+            {"stock": "Cholamandalam Investment", "percentage": 3.50},
+            {"stock": "Supreme Industries", "percentage": 3.20},
+            {"stock": "Varun Beverages", "percentage": 2.90},
+            {"stock": "BWD Industries", "percentage": 2.60},
+        ],
+    },
+    "kotak emerging equity": {
+        "fund_name": "Kotak Emerging Equity Fund",
+        "category": "Mid Cap",
+        "holdings": [
+            {"stock": "Supreme Industries", "percentage": 4.10},
+            {"stock": "Persistent Systems", "percentage": 3.80},
+            {"stock": "Cummins India", "percentage": 3.40},
+            {"stock": "Schaeffler India", "percentage": 3.00},
+            {"stock": "Solar Industries", "percentage": 2.80},
+        ],
+    },
+    # --- SMALL CAP ---
+    "quant small cap": {
+        "fund_name": "Quant Small Cap Fund",
+        "category": "Small Cap",
+        "holdings": [
+            {"stock": "Reliance Industries", "percentage": 6.10},
+            {"stock": "Jio Financial Services", "percentage": 4.80},
+            {"stock": "Aegis Logistics", "percentage": 3.90},
+            {"stock": "HFCL", "percentage": 3.20},
+            {"stock": "Bikaji Foods", "percentage": 2.90},
+        ],
+    },
+    "axis small cap": {
+        "fund_name": "Axis Small Cap Fund",
+        "category": "Small Cap",
+        "holdings": [
+            {"stock": "Narayana Hrudayalaya", "percentage": 3.90},
+            {"stock": "Brigade Enterprises", "percentage": 3.50},
+            {"stock": "CCL Products", "percentage": 3.20},
+            {"stock": "Krishna Institute of Medical", "percentage": 2.90},
+            {"stock": "Chalet Hotels", "percentage": 2.80},
+        ],
+    },
+    "tata small cap": {
+        "fund_name": "Tata Small Cap Fund",
+        "category": "Small Cap",
+        "holdings": [
+            {"stock": "IDFC First Bank", "percentage": 3.40},
+            {"stock": "BASF India", "percentage": 3.10},
+            {"stock": "Quess Corp", "percentage": 2.80},
+            {"stock": "Allcargo Logistics", "percentage": 2.60},
+            {"stock": "DCB Bank", "percentage": 2.50},
+        ],
+    },
+    # --- MULTI CAP ---
+    "nippon india multi cap": {
+        "fund_name": "Nippon India Multi Cap Fund",
+        "category": "Multi Cap",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 4.80},
+            {"stock": "ICICI Bank", "percentage": 4.20},
+            {"stock": "Larsen & Toubro", "percentage": 3.10},
+            {"stock": "Linde India", "percentage": 2.60},
+            {"stock": "Reliance Industries", "percentage": 2.40},
+        ],
+    },
+    "mahindra manulife multi cap": {
+        "fund_name": "Mahindra Manulife Multi Cap Fund",
+        "category": "Multi Cap",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 4.50},
+            {"stock": "ICICI Bank", "percentage": 3.90},
+            {"stock": "Infosys", "percentage": 2.80},
+            {"stock": "Larsen & Toubro", "percentage": 2.60},
+            {"stock": "Tata Motors", "percentage": 2.30},
+        ],
+    },
+    "icici prudential multicap": {
+        "fund_name": "ICICI Prudential Multicap Fund",
+        "category": "Multi Cap",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 5.10},
+            {"stock": "Infosys", "percentage": 3.80},
+            {"stock": "HDFC Bank", "percentage": 3.60},
+            {"stock": "Reliance Industries", "percentage": 3.20},
+            {"stock": "TCS", "percentage": 2.70},
+        ],
+    },
+    # --- ELSS ---
+    "quant elss tax saver": {
+        "fund_name": "Quant ELSS Tax Saver Fund",
+        "category": "ELSS",
+        "holdings": [
+            {"stock": "Reliance Industries", "percentage": 7.40},
+            {"stock": "Jio Financial Services", "percentage": 5.20},
+            {"stock": "Adani Power", "percentage": 4.30},
+            {"stock": "Hindalco Industries", "percentage": 3.80},
+            {"stock": "Steel Authority of India", "percentage": 3.10},
+        ],
+    },
+    "dsp elss tax saver": {
+        "fund_name": "DSP ELSS Tax Saver Fund",
+        "category": "ELSS",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 6.80},
+            {"stock": "HDFC Bank", "percentage": 6.20},
+            {"stock": "Infosys", "percentage": 4.50},
+            {"stock": "Axis Bank", "percentage": 3.90},
+            {"stock": "Larsen & Toubro", "percentage": 3.40},
+        ],
+    },
+    "sbi long term equity": {
+        "fund_name": "SBI Long Term Equity Fund",
+        "category": "ELSS",
+        "holdings": [
+            {"stock": "GE T&D India", "percentage": 4.80},
+            {"stock": "ICICI Bank", "percentage": 4.50},
+            {"stock": "Reliance Industries", "percentage": 3.90},
+            {"stock": "Mahindra & Mahindra", "percentage": 3.20},
+            {"stock": "Bharti Airtel", "percentage": 2.90},
+        ],
+    },
+    # --- VALUE / CONTRA ---
+    "sbi contra": {
+        "fund_name": "SBI Contra Fund",
+        "category": "Value/Contra",
+        "holdings": [
+            {"stock": "GAIL India", "percentage": 3.80},
+            {"stock": "HDFC Bank", "percentage": 3.40},
+            {"stock": "Cognizant Technology Solutions", "percentage": 3.10},
+            {"stock": "State Bank of India", "percentage": 2.90},
+            {"stock": "Oil & Natural Gas Corp", "percentage": 2.70},
+        ],
+    },
+    "icici prudential value discovery": {
+        "fund_name": "ICICI Prudential Value Discovery Fund",
+        "category": "Value/Contra",
+        "holdings": [
+            {"stock": "NTPC", "percentage": 8.20},
+            {"stock": "ICICI Bank", "percentage": 6.90},
+            {"stock": "Bharti Airtel", "percentage": 5.40},
+            {"stock": "ONGC", "percentage": 4.80},
+            {"stock": "Sun Pharma", "percentage": 3.90},
+        ],
+    },
+    "invesco india contra": {
+        "fund_name": "Invesco India Contra Fund",
+        "category": "Value/Contra",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 7.10},
+            {"stock": "HDFC Bank", "percentage": 6.40},
+            {"stock": "Infosys", "percentage": 4.30},
+            {"stock": "Reliance Industries", "percentage": 3.90},
+            {"stock": "NTPC", "percentage": 3.20},
+        ],
+    },
+    # --- FOCUSED ---
+    "360 one focused equity": {
+        "fund_name": "360 ONE Focused Equity Fund",
+        "category": "Focused",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 9.80},
+            {"stock": "HDFC Bank", "percentage": 8.90},
+            {"stock": "Infosys", "percentage": 7.20},
+            {"stock": "Larsen & Toubro", "percentage": 6.50},
+            {"stock": "Bharti Airtel", "percentage": 5.90},
+        ],
+    },
+    "sbi focused equity": {
+        "fund_name": "SBI Focused Equity Fund",
+        "category": "Focused",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 8.90},
+            {"stock": "ICICI Bank", "percentage": 7.40},
+            {"stock": "Divi's Laboratories", "percentage": 6.20},
+            {"stock": "TCS", "percentage": 5.80},
+            {"stock": "Bajaj Finance", "percentage": 5.10},
+        ],
+    },
+    "hdfc focused 30": {
+        "fund_name": "HDFC Focused 30 Fund",
+        "category": "Focused",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 9.10},
+            {"stock": "HDFC Bank", "percentage": 8.40},
+            {"stock": "Axis Bank", "percentage": 6.50},
+            {"stock": "NTPC", "percentage": 5.20},
+            {"stock": "Larsen & Toubro", "percentage": 4.60},
+        ],
+    },
+    # --- SECTORAL / THEMATIC ---
+    "icici prudential infrastructure": {
+        "fund_name": "ICICI Prudential Infrastructure Fund",
+        "category": "Sectoral/Thematic",
+        "holdings": [
+            {"stock": "Larsen & Toubro", "percentage": 11.20},
+            {"stock": "NTPC", "percentage": 8.40},
+            {"stock": "Bharti Airtel", "percentage": 6.90},
+            {"stock": "Gujarat Gas", "percentage": 4.50},
+            {"stock": "Oil & Natural Gas Corp", "percentage": 4.10},
+        ],
+    },
+    "tata digital india": {
+        "fund_name": "Tata Digital India Fund",
+        "category": "Sectoral/Thematic",
+        "holdings": [
+            {"stock": "Infosys", "percentage": 18.50},
+            {"stock": "TCS", "percentage": 14.20},
+            {"stock": "HCL Technologies", "percentage": 9.80},
+            {"stock": "Tech Mahindra", "percentage": 7.40},
+            {"stock": "Persistent Systems", "percentage": 5.60},
+        ],
+    },
+    "sbi healthcare opportunities": {
+        "fund_name": "SBI Healthcare Opportunities Fund",
+        "category": "Sectoral/Thematic",
+        "holdings": [
+            {"stock": "Sun Pharma", "percentage": 15.20},
+            {"stock": "Cipla", "percentage": 10.40},
+            {"stock": "Dr. Reddy's Laboratories", "percentage": 8.90},
+            {"stock": "Divi's Laboratories", "percentage": 7.60},
+            {"stock": "Apollo Hospitals", "percentage": 6.10},
+        ],
+    },
+    "nippon india power & infra": {
+        "fund_name": "Nippon India Power & Infra Fund",
+        "category": "Sectoral/Thematic",
+        "holdings": [
+            {"stock": "Reliance Industries", "percentage": 8.90},
+            {"stock": "Larsen & Toubro", "percentage": 7.50},
+            {"stock": "NTPC", "percentage": 6.80},
+            {"stock": "Power Grid Corp", "percentage": 5.90},
+            {"stock": "Tata Power", "percentage": 4.80},
+        ],
+    },
+    # --- BALANCED ADVANTAGE ---
+    "icici prudential balanced advantage": {
+        "fund_name": "ICICI Prudential Balanced Advantage Fund",
+        "category": "Balanced Advantage",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 6.50},
+            {"stock": "HDFC Bank", "percentage": 5.40},
+            {"stock": "TV Derivatives / Hedged Position", "percentage": 18.50},
+            {"stock": "Government Securities (Debt)", "percentage": 22.10},
+            {"stock": "Reliance Industries", "percentage": 3.20},
+        ],
+    },
+    "hdfc balanced advantage": {
+        "fund_name": "HDFC Balanced Advantage Fund",
+        "category": "Balanced Advantage",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 5.90},
+            {"stock": "ICICI Bank", "percentage": 5.10},
+            {"stock": "Coal India", "percentage": 4.10},
+            {"stock": "Government Securities (Debt)", "percentage": 28.40},
+            {"stock": "NTPC", "percentage": 3.20},
+        ],
+    },
+    "edelweiss balanced advantage": {
+        "fund_name": "Edelweiss Balanced Advantage Fund",
+        "category": "Balanced Advantage",
+        "holdings": [
+            {"stock": "ICICI Bank", "percentage": 5.20},
+            {"stock": "HDFC Bank", "percentage": 4.60},
+            {"stock": "Government Securities (Debt)", "percentage": 31.50},
+            {"stock": "TCS", "percentage": 2.90},
+            {"stock": "Infosys", "percentage": 2.70},
+        ],
+    },
+    # --- MULTI ASSET ALLOCATION ---
+    "icici prudential multi-asset": {
+        "fund_name": "ICICI Prudential Multi-Asset Fund",
+        "category": "Multi Asset",
+        "holdings": [
+            {"stock": "ICICI Bank (Equity)", "percentage": 5.80},
+            {"stock": "ICICI Prudential Gold ETF", "percentage": 11.40},
+            {"stock": "ICICI Prudential Silver ETF", "percentage": 4.20},
+            {"stock": "Government Debt Securities", "percentage": 24.50},
+            {"stock": "NTPC (Equity)", "percentage": 3.90},
+        ],
+    },
+    "nippon india multi asset": {
+        "fund_name": "Nippon India Multi Asset Allocation Fund",
+        "category": "Multi Asset",
+        "holdings": [
+            {"stock": "Nippon India ETF Gold BeES", "percentage": 12.80},
+            {"stock": "HDFC Bank (Equity)", "percentage": 4.80},
+            {"stock": "Government Securities (Debt)", "percentage": 21.30},
+            {"stock": "Reliance Industries (Equity)", "percentage": 3.90},
+            {"stock": "Commodity Derivatives / Silver", "percentage": 5.10},
+        ],
+    },
+    "quant multi asset": {
+        "fund_name": "Quant Multi Asset Fund",
+        "category": "Multi Asset",
+        "holdings": [
+            {"stock": "Reliance Industries (Equity)", "percentage": 6.90},
+            {"stock": "Gold ETFs", "percentage": 14.20},
+            {"stock": "Treasury Bills (Debt)", "percentage": 18.50},
+            {"stock": "Jio Financial Services", "percentage": 4.10},
+            {"stock": "Silver ETFs", "percentage": 3.80},
+        ],
+    },
+    # --- ARBITRAGE ---
+    "kotak equity arbitrage": {
+        "fund_name": "Kotak Equity Arbitrage Fund",
+        "category": "Arbitrage",
+        "holdings": [
+            {"stock": "Cash-Futures Hedged Arbitrage", "percentage": 68.50},
+            {"stock": "TREPS / Clearing Corp", "percentage": 18.20},
+            {"stock": "Commercial Papers", "percentage": 8.40},
+            {"stock": "Corporate Fixed Deposits", "percentage": 4.90},
+        ],
+    },
+    "invesco india arbitrage": {
+        "fund_name": "Invesco India Arbitrage Fund",
+        "category": "Arbitrage",
+        "holdings": [
+            {"stock": "Hedging Arbitrage Spread", "percentage": 67.10},
+            {"stock": "TREPS / Repo Market", "percentage": 20.40},
+            {"stock": "Bank Certificates of Deposit", "percentage": 7.80},
+            {"stock": "Treasury Bills", "percentage": 4.70},
+        ],
+    },
+    # --- DEBT / LIQUID / SHORT DURATION ---
+    "hdfc liquid": {
+        "fund_name": "HDFC Liquid Fund",
+        "category": "Debt/Liquid/Short Duration",
+        "holdings": [
+            {"stock": "91 Days Treasury Bills", "percentage": 28.40},
+            {"stock": "182 Days Treasury Bills", "percentage": 18.20},
+            {"stock": "NABARD Commercial Paper", "percentage": 7.50},
+            {"stock": "TREPS / Reverse Repo", "percentage": 12.10},
+            {"stock": "HDFC Bank CD", "percentage": 6.80},
+        ],
+    },
+    "icici prudential savings": {
+        "fund_name": "ICICI Prudential Savings Fund",
+        "category": "Debt/Liquid/Short Duration",
+        "holdings": [
+            {"stock": "NABARD Corporate Bonds", "percentage": 8.90},
+            {"stock": "REC Ltd Bonds", "percentage": 7.40},
+            {"stock": "PFC Corporate Bonds", "percentage": 6.80},
+            {"stock": "182 Days Treasury Bills", "percentage": 14.50},
+            {"stock": "TREPS", "percentage": 9.20},
+        ],
+    },
+    "sbi short term debt": {
+        "fund_name": "SBI Short Term Debt Fund",
+        "category": "Debt/Liquid/Short Duration",
+        "holdings": [
+            {"stock": "Government Securities (G-Sec)", "percentage": 34.20},
+            {"stock": "NABARD AAA Bonds", "percentage": 9.80},
+            {"stock": "PFC AAA Bonds", "percentage": 8.10},
+            {"stock": "TREPS / Liquid Cash", "percentage": 7.50},
+            {"stock": "Small Industries Dev Bank", "percentage": 6.40},
+        ],
+    },
+    "aditya birla sun life corporate bond": {
+        "fund_name": "Aditya Birla Sun Life Corporate Bond Fund",
+        "category": "Debt/Liquid/Short Duration",
+        "holdings": [
+            {"stock": "REC Ltd AAA Bonds", "percentage": 9.50},
+            {"stock": "NABARD AAA Bonds", "percentage": 8.80},
+            {"stock": "PFC AAA Bonds", "percentage": 8.20},
+            {"stock": "Government Securities", "percentage": 21.40},
+            {"stock": "L&T Infra Bonds", "percentage": 5.90},
+        ],
+    },
+    # --- INDEX FUNDS ---
+    "navi nifty 50 index": {
+        "fund_name": "Navi Nifty 50 Index Fund",
+        "category": "Index Fund",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 11.35},
+            {"stock": "Reliance Industries", "percentage": 9.45},
+            {"stock": "ICICI Bank", "percentage": 7.90},
+            {"stock": "Infosys", "percentage": 5.15},
+            {"stock": "TCS", "percentage": 3.75},
+        ],
+    },
+    "motilal oswal nifty midcap 150 index": {
+        "fund_name": "Motilal Oswal Nifty Midcap 150 Index Fund",
+        "category": "Index Fund",
+        "holdings": [
+            {"stock": "Max Healthcare Institute", "percentage": 2.25},
+            {"stock": "Persistent Systems", "percentage": 2.10},
+            {"stock": "Indian Hotels Company", "percentage": 1.95},
+            {"stock": "Cummins India", "percentage": 1.80},
+            {"stock": "Suzlon Energy", "percentage": 1.75},
+        ],
+    },
+    "icici prudential nifty next 50 index": {
+        "fund_name": "ICICI Prudential Nifty Next 50 Index Fund",
+        "category": "Index Fund",
+        "holdings": [
+            {"stock": "Bharat Electronics", "percentage": 4.20},
+            {"stock": "Trent", "percentage": 4.10},
+            {"stock": "Tata Power", "percentage": 3.80},
+            {"stock": "REC Ltd", "percentage": 3.50},
+            {"stock": "Power Finance Corp", "percentage": 3.40},
+        ],
+    },
+    "hdfc index sensex": {
+        "fund_name": "HDFC Index Fund - Sensex Plan",
+        "category": "Index Fund",
+        "holdings": [
+            {"stock": "HDFC Bank", "percentage": 13.10},
+            {"stock": "Reliance Industries", "percentage": 11.20},
+            {"stock": "ICICI Bank", "percentage": 9.20},
+            {"stock": "Infosys", "percentage": 6.10},
+            {"stock": "TCS", "percentage": 4.40},
+        ],
+    },
+    # --- GOLD / INTERNATIONAL ---
+    "sbi gold": {
+        "fund_name": "SBI Gold Fund",
+        "category": "Gold/International",
+        "holdings": [
+            {"stock": "SBI ETF Gold (Physical Gold)", "percentage": 98.20},
+            {"stock": "TREPS / Cash Margins", "percentage": 1.80},
+        ],
+    },
+    "franklin us opportunities": {
+        "fund_name": "Franklin India Feeder - Franklin U.S. Opportunities",
+        "category": "Gold/International",
+        "holdings": [
+            {"stock": "Microsoft Corp", "percentage": 8.90},
+            {"stock": "NVIDIA Corp", "percentage": 8.20},
+            {"stock": "Amazon.com Inc", "percentage": 6.80},
+            {"stock": "Meta Platforms Inc", "percentage": 5.10},
+            {"stock": "Apple Inc", "percentage": 4.60},
+        ],
+    },
     }
 
     # Search by partial name match
@@ -795,50 +1342,39 @@ def extract_image(file_path: str) -> dict:
         }
     except Exception as e:
         return {"error": f"Image extraction failed (try PNG/JPG): {str(e)}"}
+
 # ─────────────────────────────────────────
-# TEST — run this file directly to verify
+# Tool 12: Recommendation tool by analysing investment worthiness
 # ─────────────────────────────────────────
-if __name__ == "__main__":
-    print("=" * 50)
-    print("TEST 1 — Stock Data")
-    print("=" * 50)
-    print(get_stock_data("RELIANCE.NS"))
-
-    print("\n" + "=" * 50)
-    print("TEST 2 — News")
-    print("=" * 50)
-    news = get_stock_news("Reliance Industries")
-    for n in news:
-        print(n["title"])
-
-    print("\n" + "=" * 50)
-    print("TEST 3 — Mutual Fund NAV (MFAPI)")
-    print("=" * 50)
-    mf = get_mutual_fund_nav("SBI Bluechip")
-    print(f"Fund: {mf.get('scheme_name')}")
-    print(f"Current NAV: {mf.get('current_nav')} ({mf.get('current_date')})")
-    print(f"3yr Growth: {mf.get('growth_3yr_%')}%")
-    print(f"5yr Growth: {mf.get('growth_5yr_%')}%")
-
-    print("\n" + "=" * 50)
-    print("TEST 4 — Economic Indicators")
-    print("=" * 50)
-    for k, v in get_economic_indicators().items():
-        print(f"{k}: {v['value']} ({v['year']})")
-
-    print("\n" + "=" * 50)
-    print("TEST 5 — Competitor Comparison")
-    print("=" * 50)
-    for c in get_competitor_data("TCS.NS")["competitors"]:
-        print(f"{c['company']} | Price: {c['price']} | PE: {c['pe_ratio']} | Dividend Yield: {c['dividend_yield']}%")
-
-    print("\n" + "=" * 50)
-    print("TEST 6 — Price Alerts")
-    print("=" * 50)
-    print(get_price_alerts("RELIANCE.NS"))
-
-    print("\n" + "=" * 50)
-    print("TEST 7 — Historical Growth")
-    print("=" * 50)
-    growth = get_historical_growth("TCS.NS")
-    print(f"TCS | Current: ₹{growth['current_price']} | 3yr Growth: {growth['3yr_growth_%']}% | 5yr Growth: {growth['5yr_growth_%']}%")
+def analyze_investment_worthiness(ticker: str, fund_name: str = None) -> dict:
+    """
+    Comprehensive analysis for investment decision
+    Returns: risk_profile, valuation, growth, sentiment
+    """
+    try:
+        if ticker:
+            # Get stock data
+            stock_data = get_stock_data(ticker)
+            growth_data = get_historical_growth(ticker)
+            news_data = get_stock_news(ticker)
+            
+            return {
+                "valuation": {
+                    "pe_ratio": stock_data.get("pe_ratio", "N/A"),
+                    "assessment": "Undervalued" if stock_data.get("pe_ratio", 999) < 15 else "Fairly valued" if stock_data.get("pe_ratio", 0) < 25 else "Overvalued"
+                },
+                "growth": {
+                    "three_year_cagr": growth_data.get("three_year_cagr", "N/A"),
+                    "trend": "Strong" if growth_data.get("three_year_cagr", 0) > 15 else "Moderate" if growth_data.get("three_year_cagr", 0) > 5 else "Weak"
+                },
+                "sentiment": {
+                    "recent_news_count": len(news_data),
+                    "sentiment": "Positive" if len(news_data) > 0 else "Neutral"
+                },
+                "risk_factors": {
+                    "volatility": "High" if stock_data.get("pe_ratio", 0) > 25 else "Medium",
+                    "sector_concentration": "Check if already invested in same sector"
+                }
+            }
+    except Exception as e:
+        return {"error": str(e)}
