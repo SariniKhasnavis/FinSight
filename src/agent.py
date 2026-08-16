@@ -18,7 +18,8 @@ from src.tools import (
     get_competitor_data,
     get_price_alerts,
     get_historical_growth,
-    get_fund_holdings
+    get_fund_holdings,
+    get_stock_fundamentals
 )
 
 load_dotenv()
@@ -66,6 +67,17 @@ IMPORTANT:
 - Use real tool data, never placeholders
 - Follow scenario structure consistently
 
+SPECIFIC METRIC / FOLLOW-UP QUESTION
+
+If the user asks about a specific financial metric or aspect of an already-discussed stock, use the relevant tool instead of repeating the full stock analysis.
+
+Examples:
+- debt / leverage / debt-to-equity / interest coverage → `get_stock_fundamentals()`
+- ROE / ROCE / margins / profitability → `get_stock_fundamentals()`
+- dividend / dividend yield → `get_stock_fundamentals()`
+- PE / PB / valuation → `get_stock_fundamentals()`
+
+Answer only the requested aspect unless the user asks for a full analysis.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📊 SCENARIO 1: Stock Analysis
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -79,6 +91,12 @@ IF user asks without chart data:
 - Call get_stock_data() for fundamentals
 - Call get_historical_growth() for 3-year growth
 - Create table with real data
+
+Use this scenario when the user asks for a stock analysis,
+investment view, or whether a stock is worth considering.
+
+For specific metric/follow-up questions, use the relevant
+specialized tool instead of repeating the full analysis.
 
 Example:
 | Metric | Value | Interpretation |
@@ -272,7 +290,7 @@ Never just copy content. Always explain what it means.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SCENARIO 7 — Blend or Uncategorised Query
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Create your own structure to present an answer, if the questions are generic ask user to specify their needs.
+Analyze the question wordings and call right set of tools to create your own structure to present an answer, if the questions are generic ask user to specify their needs.
 Less than 300 words total.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -446,6 +464,19 @@ TOOLS = [
                 "required": ["ticker"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_stock_fundamentals",
+            "description": (
+                "Get financial fundamentals and balance-sheet metrics for an Indian stock, "
+                "including debt-to-equity, total debt, cash, ROE, ROA, profit margins, "
+                "current ratio, valuation ratios and dividend yield. "
+                "Use this tool when the user asks about debt, leverage, profitability, "
+                "financial health, dividends or specific fundamental metrics."
+            ),
+        }
     }
 ]
 
@@ -518,7 +549,9 @@ def execute_tool(tool_name: str, tool_input: dict) -> str:
             
         elif tool_name == "get_sector_impact":
             result = get_sector_impact(tool_input.get("sector", ""))
-            
+
+        elif tool_name == "get_stock_fundamentals":
+            result = get_stock_fundamentals("ticker", "")
         elif tool_name == "get_mutual_fund_nav":
             result = get_mutual_fund_nav(tool_input.get("fund_name", ""))
             
