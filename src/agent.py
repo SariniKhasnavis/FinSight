@@ -675,7 +675,7 @@ Analyze the document based on the user's query above."""
             tools=TOOLS,
             tool_choice="auto",
             temperature=0.1,
-            max_tokens=1800
+            max_tokens=1500
         )
         print("===================================")
         print(response.choices[0].message)
