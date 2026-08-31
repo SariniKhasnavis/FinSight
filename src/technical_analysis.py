@@ -262,19 +262,19 @@ def get_technical_indicators(ticker, period="6mo"):
         # Get P/E Ratio
         pe_ratio = 0
         try:
-            stock_info = yf.Ticker(ticker).info
-            # Try to get PE from stock.info
-            pe_ratio = stock_info.get('trailingPE') or stock_info.get('forwardPE')
+            from yahooquery import Ticker as YQTicker
+            yq = YQTicker(ticker)
+            pe_ratio = yq.pe_ratio
             if pe_ratio:
                 pe_ratio = round(float(pe_ratio), 2)
-            else:
-                # Fallback: call get_stock_data which works better
-                from src.tools import get_stock_data
-                fund_data = get_stock_data(ticker.replace('.NS', ''))
-                pe_ratio = fund_data.get('pe_ratio', 0) or 0
-        except Exception as pe_error:
-            print(f"P/E ratio fetch error: {str(pe_error)}")
-            pe_ratio = 0
+        except:
+            try:
+                stock_info = yf.Ticker(ticker).info
+                pe_ratio = stock_info.get('trailingPE') or stock_info.get('forwardPE') or 0
+                if pe_ratio:
+                    pe_ratio = round(float(pe_ratio), 2)
+            except:
+                pe_ratio = 0
         
         return {
             "current_rsi": round(current_rsi, 2),
