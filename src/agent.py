@@ -67,12 +67,6 @@ IMPORTANT:
 - Use real tool data, never placeholders
 - Follow scenario structure consistently
 
-🎯 CRITICAL RULE:
-When user asks for stock recommendations/suggestions:
-- IGNORE the currently loaded stock chart
-- Do NOT mention or analyze the loaded stock
-- ONLY recommend and analyze NEW stocks based on user request
-- Treat recommendation request as fresh query, not related to chart
 
 SPECIFIC METRIC / FOLLOW-UP QUESTION
 
