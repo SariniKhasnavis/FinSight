@@ -263,7 +263,7 @@ def get_technical_indicators(ticker, period="6mo"):
         pe_ratio = 0
         try:
             stock_info = yf.Ticker(ticker).info
-            pe_ratio = round(stock_info.get('trailingPE', 0), 2) if stock_info.get('trailingPE') else 0
+            pe_ratio = round(float(stock_info.get('trailingPE') or stock_info.get('forwardPE') or 0), 2)
         except Exception as pe_error:
             print(f"P/E ratio fetch error: {str(pe_error)}")
             pe_ratio = 0
