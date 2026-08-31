@@ -1253,7 +1253,7 @@ def get_stock_fundamentals(ticker: str):
             "company": info.get("longName"),
 
             # Valuation
-            "pe_ratio": info.get("trailingPE"),
+            "pe_ratio": info.get("trailingPE") or info.get("forwardPE") or 0,
             "pb_ratio": info.get("priceToBook"),
             "dividend_yield": info.get("dividendYield"),
 
