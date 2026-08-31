@@ -414,7 +414,7 @@ def get_competitor_data(ticker: str) -> dict:
                 "ticker": peer,
                 "company": info.get("longName", "N/A"),
                 "price": info.get("currentPrice", "N/A"),
-                "pe_ratio": info.get("trailingPE", "N/A"),
+                "pe_ratio": round(float(info.get("trailingPE", 0)), 2) if info.get("trailingPE") else 0,
                 "market_cap": info.get("marketCap", "N/A"),
                 "52w_high": info.get("fiftyTwoWeekHigh", "N/A"),
                 "52w_low": info.get("fiftyTwoWeekLow", "N/A"),
