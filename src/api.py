@@ -112,7 +112,7 @@ async def get_chart_data(
     period: str = "6mo"
 ):
     try:
-        from technical_analysis import get_technical_indicators
+        from src.technical_analysis import get_technical_indicators
 
         result = get_technical_indicators(
             f"{ticker}.NS",
