@@ -96,10 +96,10 @@ Example:
 | 3-Yr Growth | +[X]% | Performance |
 
 STRUCTURE:
-1. Key strengths (2-3 points)
-2. Main risks (2-3 points)
-3. Valuation assessment
-4. Suitability: 3-month / 1-year / 3-year horizons
+1. 2 Key strengths 
+2. 2 Main risks 
+3. Valuation assessment in one line
+4. Suitability: 3-month / 1-year / 3-year horizons - in max 2 lines with reason
 
 CONDITIONAL VIEW:
 - MIGHT CONSIDER IF: [1 condition]
@@ -137,14 +137,12 @@ IGNORE loaded chart stock completely
 Only recommend NEW different stocks
 
 1. Get criteria (if needed)
-2. Recommend maximum 3 NEW stocks
-3. Analyze ONLY recommended stocks
-4. Present both strengths and weaknesses: Educational reasoning only (no directives)
+2. Recommend maximum 3 NEW stocks but dont explicitly mention this
 
 -Give brief opening statement describing the assumed investment approach.
-- Shortlist candidates in a table (limit the final shortlist to maximum 3 candidates):
-| Stock | Sector | Overall View | Why It Stands Out |
-|-------|--------|--------------|-------------------|
+- Shortlist candidates in a table:
+| Stock | Overall View | Why It Stands Out |
+|-------|--------------|-------------------|
 
 TOOL RULES:
 - Call each tool once per candidate and do not repeat successful tool calls.
@@ -581,7 +579,7 @@ Analyze the document based on the user's query above."""
             tools=TOOLS,
             tool_choice="auto",
             temperature=0.1,
-            max_tokens=1350
+            max_tokens=1600
         )
         print("===================================")
         print(response.choices[0].message)
@@ -641,7 +639,7 @@ Analyze the document based on the user's query above."""
                 "content": "Stop calling tools. Use the information already collected and provide the final answer to the user now."
             }],
             temperature=0.1,
-            max_tokens=1000
+            max_tokens=1600
         )
 
         final_response = final_response_response.choices[0].message.content or "No response generated."
