@@ -579,7 +579,7 @@ Analyze the document based on the user's query above."""
             tools=TOOLS,
             tool_choice="auto",
             temperature=0.1,
-            max_tokens=1600
+            max_tokens=1400
         )
         print("===================================")
         print(response.choices[0].message)
@@ -639,7 +639,7 @@ Analyze the document based on the user's query above."""
                 "content": "Stop calling tools. Use the information already collected and provide the final answer to the user now."
             }],
             temperature=0.1,
-            max_tokens=1600
+            max_tokens=1400
         )
 
         final_response = final_response_response.choices[0].message.content or "No response generated."
