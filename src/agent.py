@@ -103,9 +103,8 @@ Example:
 | Recent News | [data] | [positive/negative/mixed] |
 
 ANALYSIS STRUCTURE:
-1. Key strengths (2-3 points)
-2. Main risks (2-3 points)
-3. Investment suitability (3-month / 1-year / 3-year horizons)
+1. Main risks (2-3 points)
+2. Investment suitability (3-month / 1-year / 3-year horizons)
 
 CONDITIONAL VIEW (2-3 sentences max):
 - "MIGHT CONSIDER IF..." (1 condition)
