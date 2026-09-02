@@ -580,7 +580,7 @@ Analyze the document based on the user's query above."""
             return "Encountered an issue, please try rephrasing your question or try again later", conversation_history
         except Exception as e:
             logger.error(f"Error: {e}")
-            return f"Unable to provide analysis right now: {str(e)}. Try rephrasing your question.", conversation_history
+            return f"You have reached the chat limit. Please wait to submit another request", conversation_history
         print("===================================")
         print(response.choices[0].message)
         print("===================================")
