@@ -578,10 +578,10 @@ Analyze the document based on the user's query above."""
             
         except groq.BadRequestError as e:
             logger.error(f"Tool error: {e}")
-            return "Encountered an issue, please try rephrasing your question or try again later", conversation_history
+            return "Encountered an issue, please try again after chat limit is restored or try rephrasing your question", conversation_history
         except Exception as e:
             logger.error(f"Error: {e}")
-            return f"You have reached the chat limit. Please wait to submit another request", conversation_history
+            return f"Encountered an issue, please try again after chat limit is restored or try rephrasing your question", conversation_history
         print("===================================")
         print(response.choices[0].message)
         print("===================================")
