@@ -194,6 +194,7 @@ SCENARIO 7 — Blend or Uncategorised Query
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Analyze the question wordings and call right set of tools to create your own structure to present an answer, if the questions are generic ask user to specify their needs.
 Less than 300 words total.
+If latest market trends are asked then use information from past 3 months to start with and also use get_stock_news() tool for generating answer.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Mandatory:
