@@ -2,6 +2,8 @@
 # Using Groq API (Free Tier) — Llama 3.3 70B
 
 import os
+import groq
+import logging
 import json
 from dotenv import load_dotenv
 from groq import Groq
@@ -18,11 +20,13 @@ from src.tools import (
     get_competitor_data,
     get_price_alerts,
     get_historical_growth,
-    get_fund_holdings,
-    get_stock_fundamentals
+    get_fund_holdings
+    #get_stock_fundamentals
 )
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
@@ -61,15 +65,9 @@ IMPORTANT:
 - Switching between desktop/tablet and mobile changes ONLY the presentation style, not the content.
 
 🎓 CORE PHILOSOPHY:
-✓ Teach in beginner language (no jargon)
+✓ Teach in beginner language (no jargon) but do not call this out
 ✓ Explain "What It Means For You"
 ✓ Follow scenario structure consistently
-
-Examples:
-- debt / leverage / debt-to-equity / interest coverage → `get_stock_fundamentals()`
-- ROE / ROCE / margins / profitability → `get_stock_fundamentals()`
-- dividend / dividend yield → `get_stock_fundamentals()`
-- PE / PB / valuation → `get_stock_fundamentals()`
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📊 SCENARIO 1: Stock Analysis
@@ -78,11 +76,13 @@ Examples:
 IF chart data provided (RSI, MACD, Price):
 - Analyze using provided metrics
 - Explain what each means
-- NO tool calls needed
+- Call appropriate tools among get_stock_data(), get_historical_growth() or get_stock_news() if further questions asked
 
 IF no chart data:
 - Call get_stock_data() for fundamentals
 - Call get_historical_growth() for 3-year growth
+- Call get_stock_news() for latest news
+- Include ONE key news item in analysis to show cause-effect
 - Create simple table
 
 For specific metric/follow-up questions, use the relevant specialized tool instead of repeating the full analysis.
@@ -90,18 +90,13 @@ For specific metric/follow-up questions, use the relevant specialized tool inste
 Example:
 | Metric | Value | Interpretation |
 | Price | ₹[X] | Current cost |
-| PE Ratio | [X] | Valuation |
+| PE Ratio | [X] | Valuation assessment |
 | 3-Yr Growth | +[X]% | Performance |
 
 STRUCTURE:
-1. 2 Key strengths 
-2. 2 Main risks 
-3. Valuation assessment in one line
-4. Suitability: 3-month / 1-year / 3-year horizons - in max 2 lines with reason
-
-CONDITIONAL VIEW:
-- MIGHT CONSIDER IF: [1 condition]
-- MIGHT AVOID IF: [1 condition]
+1. Key strengths (2)
+2. Main risks (2)
+3. Suitability: 3-month / 1-year / 3-year horizons - in max 2 lines with reason but donot mention 'max 2 lines' explicitly
 
 NEXT STEPS:
 Suggest 2 to 3 relevant factors to check or questions to explore next that could change or deepen the investment case.
@@ -125,7 +120,7 @@ ALWAYS:
 | 5-Year | Calculate using NAV history from get_mutual_fund_nav | Long-term performance |
 | 3-Year | Calculate using NAV history from get_mutual_fund_nav | Recent performance |
 
-Explain the meaning of these in beginner language.
+Explain the meaning of these.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📊 SCENARIO 3: Recommendation Request
@@ -137,10 +132,8 @@ Only recommend NEW different stocks
 1. Get criteria (if needed)
 2. Recommend maximum 3 NEW stocks but dont explicitly mention this
 
--Give brief opening statement describing the assumed investment approach.
-- Shortlist candidates in a table:
-| Stock | Overall View | Why It Stands Out |
-|-------|--------------|-------------------|
+- Give brief opening statement describing the assumed investment approach.
+- Shortlist candidates and show why it stands out
 
 TOOL RULES:
 - Call each tool once per candidate and do not repeat successful tool calls.
@@ -191,7 +184,7 @@ Recommend based on real data. But if the user asks only to compare holdings of f
 When user uploads a financial document (PDF/Excel/Image):
 
 1. Extract and understand the document content
-2. Translate technical jargon to beginner language
+2. Translate technical jargon to beginner language but do not call this out
 3. Explain each section: "What you should understand or Key takeaways"
 4. Highlight important metrics or numbers
 5. Give actionable insights
@@ -205,7 +198,7 @@ Less than 300 words total.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Mandatory:
 ✓ Explain cause-effect chains
-✓ Beginner-friendly language
+✓ Beginner-friendly language but do not call this out
 ✓ Educational, not directive
 ✓ End with disclaimer: "Educational analysis, not financial advice"
 """
@@ -324,20 +317,20 @@ TOOLS = [
             }
         }
     },
-    {
-        "type": "function",
-        "function": {
-            "name": "get_competitor_data",
-            "description": "Get competitor comparison data for a stock.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "ticker": {"type": "string", "description": "NSE ticker e.g. TCS.NS"}
-                },
-                "required": ["ticker"]
-            }
-        }
-    },
+   # {
+    #    "type": "function",
+     #   "function": {
+      #      "name": "get_competitor_data",
+       #     "description": "Get competitor comparison data for a stock.",
+        #    "parameters": {
+         #       "type": "object",
+          #      "properties": {
+           #         "ticker": {"type": "string", "description": "NSE ticker e.g. TCS.NS"}
+            #    },
+             #   "required": ["ticker"]
+            #}
+        #}
+    #},
     {
         "type": "function",
         "function": {
@@ -451,8 +444,8 @@ def execute_tool(tool_name: str, tool_input: dict) -> str:
         elif tool_name == "get_sector_impact":
             result = get_sector_impact(tool_input.get("sector", ""))
 
-        elif tool_name == "get_stock_fundamentals":
-            result = get_stock_fundamentals("ticker", "")
+      #  elif tool_name == "get_stock_fundamentals":
+       #     result = get_stock_fundamentals("ticker", "")
         elif tool_name == "get_mutual_fund_nav":
             result = get_mutual_fund_nav(tool_input.get("fund_name", ""))
             
@@ -570,14 +563,24 @@ Analyze the document based on the user's query above."""
     while iteration < max_iterations:
         iteration += 1
 
-        response = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
-            messages=messages,
-            tools=TOOLS,
-            tool_choice="auto",
-            temperature=0.1,
-            max_tokens=1400
-        )
+        try:
+            response = client.chat.completions.create(
+                model="openai/gpt-oss-120b",
+                messages=messages,
+                tools=TOOLS,
+                tool_choice="auto",
+                temperature=0.1,
+                max_tokens=1400
+            )
+            # ← Keep all your existing response handling code here
+            # (the code that was already after this create() call)
+            
+        except groq.BadRequestError as e:
+            logger.error(f"Tool error: {e}")
+            return "Encountered an issue, please try rephrasing your question or try again later", conversation_history
+        except Exception as e:
+            logger.error(f"Error: {e}")
+            return f"Unable to provide analysis right now: {str(e)}. Try rephrasing your question.", conversation_history
         print("===================================")
         print(response.choices[0].message)
         print("===================================")
