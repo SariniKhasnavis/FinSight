@@ -285,7 +285,18 @@ def get_technical_indicators(ticker, period="6mo"):
                     pe_ratio = round(float(pe_ratio), 2)
             except Exception as e2:
                 logger.error(f"yfinance failed: {e2}")
-                pe_ratio = 0
+                # ← ADD THIS FALLBACK
+                try:
+                    from src.tools import get_stock_data
+                    ticker_clean = ticker.replace('.NS', '')
+                    stock_data = get_stock_data(ticker_clean)
+                    pe_ratio = stock_data.get('pe_ratio', 0)
+                    if pe_ratio and pe_ratio != 'N/A':
+                        pe_ratio = round(float(pe_ratio), 2)
+                    logger.info(f"get_stock_data PE fallback: {pe_ratio}")
+                except Exception as e3:
+                    logger.error(f"All PE fetching failed: {e3}")
+                    pe_ratio = 0
 
         logger.info(f"Final PE ratio: {pe_ratio}")
         
