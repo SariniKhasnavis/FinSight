@@ -269,14 +269,23 @@ def get_technical_indicators(ticker, period="6mo"):
         logger.info(f"Fetching PE for {ticker}")
 
         try:
-            stock_info = yf.Ticker(ticker).info
-            pe_ratio = stock_info.get('trailingPE') or stock_info.get('forwardPE') or 0
-            logger.info(f"yfinance PE: {pe_ratio}")
+            from yahooquery import Ticker as YQTicker
+            yq = YQTicker(ticker)
+            pe_ratio = yq.pe_ratio
+            logger.info(f"yahooquery PE: {pe_ratio}")
             if pe_ratio:
                 pe_ratio = round(float(pe_ratio), 2)
         except Exception as e:
-            logger.error(f"yfinance failed: {e}")
-            pe_ratio = 0
+            logger.error(f"yahooquery failed: {e}")
+            try:
+                stock_info = yf.Ticker(ticker).info
+                pe_ratio = stock_info.get('trailingPE') or stock_info.get('forwardPE') or 0
+                logger.info(f"yfinance PE: {pe_ratio}")
+                if pe_ratio:
+                    pe_ratio = round(float(pe_ratio), 2)
+            except Exception as e2:
+                logger.error(f"yfinance failed: {e2}")
+                pe_ratio = 0
 
         logger.info(f"Final PE ratio: {pe_ratio}")
         
