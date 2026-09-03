@@ -269,34 +269,17 @@ def get_technical_indicators(ticker, period="6mo"):
         logger.info(f"Fetching PE for {ticker}")
 
         try:
-            from yahooquery import Ticker as YQTicker
-            yq = YQTicker(ticker)
-            pe_ratio = yq.pe_ratio
-            logger.info(f"yahooquery PE: {pe_ratio}")
+            stock_info = yf.Ticker(ticker).info
+            # Try multiple PE fields
+            pe_ratio = stock_info.get('trailingPE') or stock_info.get('forwardPE') or stock_info.get('pegRatio') or 0
+            logger.info(f"yfinance PE: {pe_ratio}")
             if pe_ratio:
                 pe_ratio = round(float(pe_ratio), 2)
+            else:
+                pe_ratio = 0
         except Exception as e:
-            logger.error(f"yahooquery failed: {e}")
-            try:
-                stock_info = yf.Ticker(ticker).info
-                pe_ratio = stock_info.get('trailingPE') or stock_info.get('forwardPE') or 0
-                logger.info(f"yfinance PE: {pe_ratio}")
-                if pe_ratio:
-                    pe_ratio = round(float(pe_ratio), 2)
-            except Exception as e2:
-                logger.error(f"yfinance failed: {e2}")
-                # ← ADD THIS FALLBACK
-                try:
-                    from src.tools import get_stock_data
-                    stock_data = get_stock_data(ticker)
-                    print(f"DEBUG get_stock_data result: {stock_data}")  # ← ADD THIS
-                    pe_ratio = stock_data.get('pe_ratio', 0)
-                    if pe_ratio and pe_ratio != 'N/A':
-                        pe_ratio = round(float(pe_ratio), 2)
-                    logger.info(f"get_stock_data PE fallback: {pe_ratio}")
-                except Exception as e3:
-                    logger.error(f"All PE fetching failed: {e3}")
-                    pe_ratio = 0
+            logger.error(f"PE fetching failed: {e}")
+            pe_ratio = 0
 
         logger.info(f"Final PE ratio: {pe_ratio}")
         
