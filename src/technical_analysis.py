@@ -288,8 +288,8 @@ def get_technical_indicators(ticker, period="6mo"):
                 # ← ADD THIS FALLBACK
                 try:
                     from src.tools import get_stock_data
-                    ticker_clean = ticker.replace('.NS', '')
-                    stock_data = get_stock_data(ticker_clean)
+                    stock_data = get_stock_data(ticker)
+                    print(f"DEBUG get_stock_data result: {stock_data}")  # ← ADD THIS
                     pe_ratio = stock_data.get('pe_ratio', 0)
                     if pe_ratio and pe_ratio != 'N/A':
                         pe_ratio = round(float(pe_ratio), 2)
