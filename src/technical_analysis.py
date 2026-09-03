@@ -1,6 +1,8 @@
 import yfinance as yf
 import pandas as pd
 import traceback
+import logging
+logger = logging.getLogger(__name__)
 
 def get_technical_indicators(ticker, period="6mo"):
     """Calculate RSI, MACD, EMA50, EMA200, and P/E Ratio for a stock"""
@@ -260,10 +262,6 @@ def get_technical_indicators(ticker, period="6mo"):
             current_ema_200 = 0
         
         # Get P/E Ratio
-        import logging
-        logger = logging.getLogger(__name__)
-
-        # ... later in the code ...
 
         pe_ratio = 0
         logger.info(f"Fetching PE for {ticker}")
@@ -271,7 +269,8 @@ def get_technical_indicators(ticker, period="6mo"):
         try:
             # Use get_stock_data exactly like the agent does
             from src.tools import get_stock_data
-            stock_data = get_stock_data(ticker)
+            ticker_clean = ticker.replace('.NS', '')
+            stock_data = get_stock_data(ticker_clean)
             pe_ratio = stock_data.get('pe_ratio', 0)
             logger.info(f"get_stock_data PE: {pe_ratio}")
             
