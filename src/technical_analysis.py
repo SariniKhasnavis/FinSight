@@ -269,16 +269,22 @@ def get_technical_indicators(ticker, period="6mo"):
         logger.info(f"Fetching PE for {ticker}")
 
         try:
-            stock_info = yf.Ticker(ticker).info
-            # Try multiple PE fields
-            pe_ratio = stock_info.get('trailingPE') or stock_info.get('forwardPE') or stock_info.get('pegRatio') or 0
-            logger.info(f"yfinance PE: {pe_ratio}")
-            if pe_ratio:
-                pe_ratio = round(float(pe_ratio), 2)
+            # Use get_stock_data exactly like the agent does
+            from src.tools import get_stock_data
+            stock_data = get_stock_data(ticker)
+            pe_ratio = stock_data.get('pe_ratio', 0)
+            logger.info(f"get_stock_data PE: {pe_ratio}")
+            
+            if pe_ratio and pe_ratio != 'N/A':
+                try:
+                    pe_ratio = round(float(pe_ratio), 2)
+                except:
+                    pe_ratio = 0
             else:
                 pe_ratio = 0
+                
         except Exception as e:
-            logger.error(f"PE fetching failed: {e}")
+            logger.error(f"get_stock_data failed: {e}")
             pe_ratio = 0
 
         logger.info(f"Final PE ratio: {pe_ratio}")
