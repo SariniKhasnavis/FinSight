@@ -163,6 +163,27 @@ def get_technical_indicators(ticker, period="6mo"):
                 auto_adjust=False,
                 progress=False
             )
+            if data.empty:
+                raise ValueError("Empty data returned")
+
+        except Exception as download_error:
+            print(f"Download Error: {download_error}")
+            ticker_no_ns = ticker.replace(".NS", "")
+            print(f"Trying fallback ticker: {ticker_no_ns}")
+        # Get PE Ratio from Ticker info
+        pe_ratio = 0
+        try:
+            ticker_clean = ticker.replace('.NS', '')
+            stock = yf.Ticker(ticker_clean)
+            info = stock.info
+            pe_ratio = info.get('trailingPE') or info.get('forwardPE') or 0
+            
+            if pe_ratio:
+                pe_ratio = round(float(pe_ratio), 2)
+            logger.info(f"PE ratio fetched: {pe_ratio}")
+        except Exception as e:
+            logger.error(f"PE fetch failed: {e}")
+            pe_ratio = 0
 
     # Sometimes yfinance doesn't raise an exception, it just returns an empty DataFrame
             if data.empty:
@@ -263,30 +284,6 @@ def get_technical_indicators(ticker, period="6mo"):
         
         # Get P/E Ratio
 
-        pe_ratio = 0
-        logger.info(f"Fetching PE for {ticker}")
-
-        try:
-            # Use get_stock_data exactly like the agent does
-            from src.tools import get_stock_data
-            ticker_clean = ticker.replace('.NS', '')
-            stock_data = get_stock_data(ticker_clean)
-            pe_ratio = stock_data.get('pe_ratio', 0)
-            logger.info(f"get_stock_data PE: {pe_ratio}")
-            
-            if pe_ratio and pe_ratio != 'N/A':
-                try:
-                    pe_ratio = round(float(pe_ratio), 2)
-                except:
-                    pe_ratio = 0
-            else:
-                pe_ratio = 0
-                
-        except Exception as e:
-            logger.error(f"get_stock_data failed: {e}")
-            pe_ratio = 0
-
-        logger.info(f"Final PE ratio: {pe_ratio}")
         
         return {
             "current_rsi": round(current_rsi, 2),
